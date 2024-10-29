@@ -1,7 +1,9 @@
-package com.backend.backend.user;
+package com.backend.Controller;
 
 import java.util.List;
 
+import com.backend.Model.User;
+import com.backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 public class UserControler {
   @Autowired
   private UserService userService;

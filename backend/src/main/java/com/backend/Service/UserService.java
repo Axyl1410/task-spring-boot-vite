@@ -1,8 +1,10 @@
-package com.backend.backend.user;
+package com.backend.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import com.backend.Model.User;
+import com.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
