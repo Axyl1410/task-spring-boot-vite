@@ -1,14 +1,23 @@
 package com.backend.Model;
 
 import com.backend.Enum.UserEnum;
-import jakarta.persistence.*;
-import lombok.*;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Table(name = "user")
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
-@Entity
 @Getter
 @Setter
 public class User {

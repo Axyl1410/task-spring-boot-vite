@@ -3,10 +3,11 @@ package com.backend.Service;
 import java.util.List;
 import java.util.Optional;
 
-import com.backend.Model.User;
-import com.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.backend.Model.User;
+import com.backend.Repository.UserRepository;
 
 @Service
 public class UserService {
@@ -23,13 +24,16 @@ public class UserService {
 
   public User deleteUserById(int id) {
     User user = userRepository.findById(id).orElse(null);
-    if (user != null) {
+    if (user != null)
       userRepository.deleteById(id);
-    }
     return user;
   }
 
   public User createUser(User user) {
+    return userRepository.save(user);
+  }
+
+  public User updateUser(User user) {
     return userRepository.save(user);
   }
 }

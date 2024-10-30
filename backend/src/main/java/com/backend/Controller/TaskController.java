@@ -10,38 +10,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.Model.User;
-import com.backend.Service.UserService;
+import com.backend.Model.Task;
+import com.backend.Service.TaskService;
 
 @RestController
-@RequestMapping("/api/v1/user")
-public class UserControler {
+@RequestMapping("/api/v1/task")
+public class TaskController {
   @Autowired
-  private UserService userService;
+  private TaskService taskService;
 
   @GetMapping("/")
-  public List<User> getUsers() {
-    return userService.getUsers();
+  public List<Task> getAllTasks() {
+    return taskService.getTasks();
   }
 
   @GetMapping("/{id}")
-  public User getUserById(@PathVariable int id) {
-    return userService.getUserById(id).orElse(null);
+  public Task getTaskById(@PathVariable int id) {
+    return taskService.getTaskById(id);
   }
 
   @GetMapping("/delete/{id}")
-  public User deleteUserById(@PathVariable int id) {
-    return userService.deleteUserById(id);
+  public Task deleteTaskById(@PathVariable int id) {
+    return taskService.deleteTaskById(id);
   }
 
   @PostMapping("/create")
-  public User createUser(@RequestBody User user) {
-    return userService.createUser(user);
+  public Task createTask(Task task) {
+    return taskService.createTask(task);
   }
 
   @PostMapping("/update/{id}")
-  public User updateUser(@PathVariable int id, @RequestBody User user) {
-    user.setId(id);
-    return userService.updateUser(user);
+  public Task updateTask(@PathVariable int id, @RequestBody Task task) {
+    task.setId(id);
+    return taskService.updateTask(task);
   }
 }
