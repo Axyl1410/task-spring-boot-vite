@@ -4,6 +4,7 @@ import Loading from "./components/common/loading/Loading";
 import { ToastProvider } from "./components/toast/ToastContext";
 import Layout from "./layouts/Layout";
 import Login from "./pages/Login";
+import NotFound from "./pages/notfound/NotFound";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -27,6 +28,10 @@ export default function App() {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "*",
+      element: <NotFound />,
     },
   ]);
 

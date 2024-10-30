@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               >
                 <button
                   onClick={onClose}
-                  className="absolute -top-2 right-1 text-4xl dark:text-white"
+                  className="absolute -top-2 right-1 text-4xl"
                 >
                   &times;
                 </button>

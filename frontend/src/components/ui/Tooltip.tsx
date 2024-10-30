@@ -66,7 +66,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
             className={cn(
-              "pointer-events-none absolute z-10 mt-1 whitespace-nowrap rounded-sm bg-black/75 p-1 text-sm text-white transition-colors dark:bg-white/75 dark:text-gray-900",
+              "pointer-events-none absolute z-10 mt-1 whitespace-nowrap rounded-sm bg-black/75 p-1 text-sm text-white transition-colors",
               getDirectionStyles(),
             )}
           >
