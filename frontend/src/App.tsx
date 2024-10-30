@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Loading from "./components/common/loading/Loading";
 import { ToastProvider } from "./components/toast/ToastContext";
 import Layout from "./layouts/Layout";
+import Login from "./pages/Login";
 
 const Home = lazy(() => import("./pages/Home"));
 
@@ -20,6 +21,10 @@ export default function App() {
           <Home />
         </Layout>
       ),
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
   ]);
 
