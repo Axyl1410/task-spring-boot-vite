@@ -1,9 +1,11 @@
 import { useState } from "react";
 import api from "../api/axiosConfig";
+import { useToast } from "../components/toast/ToastContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { addToast } = useToast();
 
   const handleLogin = async () => {
     try {
@@ -12,13 +14,15 @@ const Login = () => {
         password,
       });
       if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("username", username);
+        localStorage.setItem("role", response.data.role); // Store role
         window.location.href = "/";
       } else {
         alert(response.data.error);
       }
     } catch (error) {
-      console.error(error);
-      alert("Login failed");
+      addToast("Login failed", "error");
     }
   };
 

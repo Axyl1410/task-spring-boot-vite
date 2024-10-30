@@ -1,5 +1,8 @@
 package com.backend.Auth;
 
+import com.backend.Enum.UserEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -15,7 +15,7 @@ public class LoginService {
   public String login(String username, String password) {
     User user = loginRepository.findByUsernameAndPassword(username, password);
     if (user != null) {
-      return JWTUtility.generateToken(username);
+      return JWTUtility.generateToken(username, String.valueOf(user.getRole()));
     }
     return null;
   }

@@ -8,6 +8,8 @@ import Login from "./pages/Login";
 const Home = lazy(() => import("./pages/Home"));
 
 export default function App() {
+  const token = localStorage.getItem("token");
+
   (function () {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.documentElement.classList.add(savedTheme);
@@ -31,7 +33,7 @@ export default function App() {
   return (
     <ToastProvider>
       <Suspense fallback={<Loading />}>
-        <RouterProvider router={router}></RouterProvider>
+        {token ? <RouterProvider router={router}></RouterProvider> : <Login />}
       </Suspense>
     </ToastProvider>
   );

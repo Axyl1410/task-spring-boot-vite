@@ -4,7 +4,7 @@ CREATE TABLE `user` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `job` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`, `username`),
   UNIQUE KEY `username_UNIQUE` (`username`)
 );
 

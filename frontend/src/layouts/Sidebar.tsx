@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { FiLogIn } from "react-icons/fi";
 import { IoMdMenu } from "react-icons/io";
 import { IoHomeOutline } from "react-icons/io5";
@@ -9,8 +8,7 @@ import useToggle from "../hooks/useToggle";
 import { cn } from "../lib/utils";
 
 export default function Sidebar() {
-  const [admin, setAdmin] = useState(false);
-  const [login, setLogin] = useState(false);
+  const admin = "admin" === localStorage.getItem("role");
   const sidebar = useToggle();
 
   return (
@@ -20,7 +18,6 @@ export default function Sidebar() {
       transition={{
         duration: 0.3,
         type: "spring",
-        stiffness: 100,
       }}
       className="flex h-screen flex-col items-center justify-between border-r border-gray-500 px-2 py-4"
     >
@@ -30,14 +27,16 @@ export default function Sidebar() {
           sidebar.isOpen ? "items-start" : "items-center",
         )}
       >
-        <div className="flex items-center gap-2 border-b border-gray-500 pb-2">
+        <div className="flex items-center gap-1 border-b border-gray-500 pb-2">
           <IoMdMenu
             className="h-7 w-7 cursor-pointer"
             onClick={sidebar.toggle}
           />
           {sidebar.isOpen && (
             <Link to="/">
-              <h1 className="text-nowrap text-xl font-bold">Task Manager</h1>
+              <h1 className="text-nowrap text-xl font-semibold">
+                Task Manager
+              </h1>
             </Link>
           )}
         </div>
@@ -67,11 +66,18 @@ export default function Sidebar() {
         )}
       </div>
       <div className="flex w-full items-center justify-center border-t border-gray-500 pt-2 font-bold">
-        <SidebarItem
-          icon={<FiLogIn className="h-6 w-6" />}
-          label={login ? "Sign out" : "Login"}
-          isOpen={sidebar.isOpen}
-        />
+        <Link
+          to="/login"
+          onClick={() => {
+            localStorage.removeItem("token");
+          }}
+        >
+          <SidebarItem
+            icon={<FiLogIn className="h-6 w-6" />}
+            label={"Sign out"}
+            isOpen={sidebar.isOpen}
+          />
+        </Link>
       </div>
     </motion.div>
   );
@@ -89,16 +95,7 @@ function SidebarItem({
   return (
     <div className="flex items-center gap-2">
       {icon}
-      {isOpen && (
-        <motion.h2
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-          className="font-semibold"
-        >
-          {label}
-        </motion.h2>
-      )}
+      {isOpen && <h2 className="text-nowrap font-semibold">{label}</h2>}
     </div>
   );
 }

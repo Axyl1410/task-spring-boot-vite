@@ -1,8 +1,24 @@
+import { useCallback } from "react";
+import Transition from "../components/common/Transition";
+
 export default function Home() {
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
+    alert("Logged out successfully");
     localStorage.removeItem("token");
-    alert("Logged out");
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
     window.location.href = "/login";
-  };
-  return <div onClick={handleLogout}>home</div>;
+  }, []);
+
+  return (
+    <Transition>
+      <div>
+        <h1>Hello {localStorage.getItem("username")} !</h1>
+        <p>Welcome to Task Manager</p>
+        <p>Click on the sidebar to navigate</p>
+        <p>Your role is {localStorage.getItem("role")}</p>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    </Transition>
+  );
 }

@@ -21,6 +21,7 @@ public class LoginController {
     Map<String, String> response = new HashMap<>();
     if (token != null) {
       response.put("token", token);
+      response.put("role", JWTUtility.extractRole(token)); // Add role to response
     } else {
       response.put("error", "Invalid credentials");
     }
