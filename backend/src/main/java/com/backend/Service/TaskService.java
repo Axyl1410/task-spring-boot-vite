@@ -35,4 +35,12 @@ public class TaskService {
   public Task updateTask(Task task) {
     return taskRepository.save(task);
   }
+
+  public List<Task> getTasksByUserCreate(String usercreate) {
+    return taskRepository.findByusercreate(usercreate);
+  }
+
+  public List<Task> getTasksByResponsibility(String responsibility) {
+    return taskRepository.findByresponsibility(responsibility);
+  }
 }

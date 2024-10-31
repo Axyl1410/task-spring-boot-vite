@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Loading from "./components/common/loading/Loading";
 import { ToastProvider } from "./components/toast/ToastContext";
+import MyTask from "./pages/MyTask";
 import Task from "./pages/Task";
 import User from "./pages/User";
 
@@ -41,6 +42,14 @@ export default function App() {
       element: (
         <Layout>
           <User />
+        </Layout>
+      ),
+    },
+    {
+      path: "/my-task",
+      element: (
+        <Layout>
+          <MyTask />
         </Layout>
       ),
     },

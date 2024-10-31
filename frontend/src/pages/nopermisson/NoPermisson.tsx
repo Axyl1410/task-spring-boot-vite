@@ -39,7 +39,7 @@ export default function NoPermisson() {
                   Trang chủ
                 </button>
               </Link>
-              <button className="bg-indigo-500 px-3 py-2 text-white hover:bg-indigo-600 active:bg-indigo-500">
+              <button className="rounded-sm bg-indigo-500 px-3 py-2 text-white hover:bg-indigo-600 active:bg-indigo-500">
                 Report a problem
               </button>
             </div>

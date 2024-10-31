@@ -44,4 +44,14 @@ public class TaskController {
     task.setId(id);
     return taskService.updateTask(task);
   }
+
+  @GetMapping("/usercreate/{usercreate}")
+  public List<Task> getTasksByUserCreate(@PathVariable String usercreate) {
+    return taskService.getTasksByUserCreate(usercreate);
+  }
+
+  @GetMapping("/responsibility/{responsibility}")
+  public List<Task> getTasksByResponsibility(@PathVariable String responsibility) {
+    return taskService.getTasksByResponsibility(responsibility);
+  }
 }

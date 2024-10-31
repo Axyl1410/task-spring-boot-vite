@@ -52,7 +52,7 @@ export default function Home() {
           <h1 className="text-lg font-bold">Hello {username}!</h1>
           <p>Your role is {role}</p>
         </div>
-        <div className="flex gap-8">
+        <div className="flex gap-4">
           {sections.map((section, index) => (
             <TaskSection key={index} {...section} />
           ))}

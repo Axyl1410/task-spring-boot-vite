@@ -10,7 +10,6 @@ export default function Task() {
   if (!admin) {
     window.location.href = "/no-permission";
   }
-
   const fetchTask = async () => {
     try {
       const response = await api.get("api/v1/task/");
@@ -19,7 +18,6 @@ export default function Task() {
       setTask([]);
     }
   };
-
   useEffect(() => {
     fetchTask();
   });

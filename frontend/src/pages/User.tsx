@@ -9,7 +9,6 @@ export default function User() {
   if (!admin) {
     window.location.href = "/no-permission";
   }
-
   const fetchUser = async () => {
     try {
       const response = await api.get("api/v1/user/");
@@ -18,7 +17,6 @@ export default function User() {
       setUser([]);
     }
   };
-
   useEffect(() => {
     fetchUser();
   }, []);

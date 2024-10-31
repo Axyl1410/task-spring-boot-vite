@@ -72,11 +72,13 @@ export default function Sidebar() {
               isOpen={sidebar.isOpen}
             />
           </Link>
-          <SidebarItem
-            icon={<MdTask className="h-6 w-6" />}
-            label="My task"
-            isOpen={sidebar.isOpen}
-          />
+          <Link to={"/my-task"}>
+            <SidebarItem
+              icon={<MdTask className="h-6 w-6" />}
+              label="My task"
+              isOpen={sidebar.isOpen}
+            />
+          </Link>
           {admin && (
             <>
               <Link to={"/task"}>
