@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div layout className="flex">
+    <motion.div layout className="flex bg-slate-100">
       <BackToTop />
       <Sidebar />
       <div className="container py-4">{children}</div>

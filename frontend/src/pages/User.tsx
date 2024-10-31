@@ -5,6 +5,10 @@ import Transition from "../components/common/Transition";
 import type { User } from "../constants/User";
 export default function User() {
   const [user, setUser] = useState<User[]>([]);
+  const admin = "admin" === localStorage.getItem("role");
+  if (!admin) {
+    window.location.href = "/no-permission";
+  }
 
   const fetchUser = async () => {
     try {

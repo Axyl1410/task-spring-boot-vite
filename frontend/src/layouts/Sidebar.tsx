@@ -9,6 +9,25 @@ import Tooltip from "../components/ui/Tooltip";
 import useToggle from "../hooks/useToggle";
 import { cn } from "../lib/utils";
 
+function SidebarItem({
+  icon,
+  label,
+  isOpen,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  isOpen: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <Tooltip direction="right" content={label} isHidden={isOpen}>
+        {icon}
+      </Tooltip>
+      {isOpen && <h2 className="text-nowrap font-semibold">{label}</h2>}
+    </div>
+  );
+}
+
 export default function Sidebar() {
   const admin = "admin" === localStorage.getItem("role");
   const sidebar = useToggle();
@@ -17,13 +36,13 @@ export default function Sidebar() {
   return (
     <>
       <motion.div
+        className="flex h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4"
         layout
         animate={{ width: sidebar.isOpen ? "240px" : "80px" }}
         transition={{
           duration: 0.3,
           type: "spring",
         }}
-        className="flex h-screen flex-col items-center justify-between border-r border-gray-500 px-2 py-4"
       >
         <div
           className={cn(
@@ -101,8 +120,8 @@ export default function Sidebar() {
             >
               Cancel
             </button>
-            <Link
-              to="/login"
+            <a
+              href="/login"
               onClick={() => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("username");
@@ -113,29 +132,10 @@ export default function Sidebar() {
               <button className="rounded-sm bg-sky-600 px-2 py-1 text-white transition-colors hover:bg-sky-700 active:bg-sky-600">
                 Sign out
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       </Modal>
     </>
-  );
-}
-
-function SidebarItem({
-  icon,
-  label,
-  isOpen,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  isOpen: boolean;
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <Tooltip direction="right" content={label} isHidden={isOpen}>
-        {icon}
-      </Tooltip>
-      {isOpen && <h2 className="text-nowrap font-semibold">{label}</h2>}
-    </div>
   );
 }
