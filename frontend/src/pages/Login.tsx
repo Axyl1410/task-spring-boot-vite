@@ -18,7 +18,7 @@ const Login = () => {
         username,
         password,
       });
-      const { token, role, error } = response.data;
+      const { token, role } = response.data;
 
       if (token) {
         localStorage.setItem("token", token);
@@ -26,7 +26,7 @@ const Login = () => {
         localStorage.setItem("role", role);
         window.location.href = "/";
       } else {
-        alert(error);
+        addToast("Login failed", "error");
       }
     } catch {
       addToast("Login failed", "error");

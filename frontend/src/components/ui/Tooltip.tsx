@@ -15,6 +15,7 @@ interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactNode;
   classname?: string;
+  isHidden?: boolean;
 }
 
 const Tooltip: React.FC<TooltipProps> = ({
@@ -22,6 +23,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
   classname,
+  isHidden = false,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -56,24 +58,26 @@ const Tooltip: React.FC<TooltipProps> = ({
       className={cn("relative z-50 inline-block", classname)}
     >
       {children}
-      <AnimatePresence>
-        {isVisible && (
-          <motion.div
-            id="tooltip"
-            role="tooltip"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className={cn(
-              "pointer-events-none absolute z-10 mt-1 whitespace-nowrap rounded-sm bg-black/75 p-1 text-sm text-white transition-colors",
-              getDirectionStyles(),
-            )}
-          >
-            {content}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {!isHidden && (
+        <AnimatePresence>
+          {isVisible && (
+            <motion.div
+              id="tooltip"
+              role="tooltip"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className={cn(
+                "pointer-events-none absolute z-10 mt-1 whitespace-nowrap rounded-sm bg-black/75 p-1 text-sm text-white transition-colors",
+                getDirectionStyles(),
+              )}
+            >
+              {content}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 };

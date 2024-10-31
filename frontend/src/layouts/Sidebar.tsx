@@ -32,7 +32,7 @@ export default function Sidebar() {
           )}
         >
           <div className="flex items-center gap-1 border-b border-gray-500 pb-2">
-            <Tooltip direction="right" content="Menu">
+            <Tooltip direction="right" content="Menu" isHidden={sidebar.isOpen}>
               <IoMdMenu
                 className="h-7 w-7 cursor-pointer"
                 onClick={sidebar.toggle}
@@ -60,16 +60,20 @@ export default function Sidebar() {
           />
           {admin && (
             <>
-              <SidebarItem
-                icon={<MdTask className="h-6 w-6" />}
-                label="All task"
-                isOpen={sidebar.isOpen}
-              />
-              <SidebarItem
-                icon={<MdPeopleAlt className="h-6 w-6" />}
-                label="Staff"
-                isOpen={sidebar.isOpen}
-              />
+              <Link to={"/task"}>
+                <SidebarItem
+                  icon={<MdTask className="h-6 w-6" />}
+                  label="All task"
+                  isOpen={sidebar.isOpen}
+                />
+              </Link>
+              <Link to={"/user"}>
+                <SidebarItem
+                  icon={<MdPeopleAlt className="h-6 w-6" />}
+                  label="Staff"
+                  isOpen={sidebar.isOpen}
+                />
+              </Link>
             </>
           )}
         </div>
@@ -85,7 +89,7 @@ export default function Sidebar() {
       </motion.div>
 
       <Modal isOpen={modal.isOpen} onClose={modal.close}>
-        <div className="flex flex-col gap-2 p-4">
+        <div className="flex flex-col gap-2 p-2">
           <h1 className="text-center text-xl font-bold">
             Are you sure you want to sign out?
           </h1>
@@ -128,7 +132,7 @@ function SidebarItem({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <Tooltip direction="right" content={label}>
+      <Tooltip direction="right" content={label} isHidden={isOpen}>
         {icon}
       </Tooltip>
       {isOpen && <h2 className="text-nowrap font-semibold">{label}</h2>}
