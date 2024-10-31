@@ -3,13 +3,11 @@ package com.backend.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import com.backend.Model.User;
 import com.backend.Service.UserService;
@@ -33,9 +31,18 @@ public class UserControler {
   }
 
   @PreAuthorize("hasRole('admin')")
-  @GetMapping("/delete/{id}")
-  public User deleteUserById(@PathVariable int id) {
-    return userService.deleteUserById(id);
+  @DeleteMapping("/delete/{username}")
+  public ResponseEntity<?> deleteUserByUsername(@PathVariable String username) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = authentication.getName();
+    User currentUser = userService.findByUsername(currentUsername);
+
+    if (currentUser != null && currentUser.getUsername().equalsIgnoreCase(username)) {
+      return ResponseEntity.notFound().build();
+    }
+
+    User deletedUser = userService.deleteUserByUsername(username);
+    return ResponseEntity.ok(deletedUser);
   }
 
   @PreAuthorize("hasRole('admin')")
@@ -45,7 +52,7 @@ public class UserControler {
   }
 
   @PreAuthorize("hasRole('admin')")
-  @PostMapping("/update/{id}")
+  @PutMapping("/update/{id}")
   public User updateUser(@PathVariable int id, @RequestBody User user) {
     user.setId(id);
     return userService.updateUser(user);

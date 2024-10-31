@@ -23,10 +23,12 @@ public class UserService {
   }
 
   public User deleteUserById(int id) {
-    User user = userRepository.findById(id).orElse(null);
-    if (user != null)
-      userRepository.deleteById(id);
-    return user;
+    Optional<User> user = userRepository.findById(id);
+    if (user.isPresent()) {
+      userRepository.delete(user.get());
+      return user.get();
+    }
+    return null;
   }
 
   public User createUser(User user) {
@@ -35,5 +37,18 @@ public class UserService {
 
   public User updateUser(User user) {
     return userRepository.save(user);
+  }
+
+  public User findByUsername(String username) {
+    return userRepository.findByusername(username);
+  }
+
+  public User deleteUserByUsername(String username) {
+    User user = userRepository.findByusername(username);
+    if (user != null) {
+      userRepository.delete(user);
+      return user;
+    }
+    return null;
   }
 }

@@ -9,14 +9,10 @@ export default function MyTask() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [task, setTask] = useState<Task[]>([]);
   const [taskResponsibility, setTaskResponsibility] = useState<Task[]>([]);
-  const admin = "admin" === localStorage.getItem("role");
+
   const create = useToggle();
   const edit = useToggle();
   const del = useToggle();
-
-  if (!admin) {
-    window.location.href = "/no-permission";
-  }
 
   const fetchTasks = async (
     endpoint: string,
@@ -40,6 +36,14 @@ export default function MyTask() {
       );
     }
   }, []);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    field: keyof Task,
+  ) => {
+    setSelectedTask((prev) => ({ ...prev, [field]: e.target.value }) as Task);
+  };
+
   return (
     <>
       <Transition>
@@ -238,9 +242,7 @@ export default function MyTask() {
             placeholder="Title"
             value={selectedTask?.title}
             onChange={(e) => {
-              if (selectedTask) {
-                setSelectedTask({ ...selectedTask, title: e.target.value });
-              }
+              handleInputChange(e, "title");
             }}
           />
           <input
@@ -249,12 +251,7 @@ export default function MyTask() {
             placeholder="Description"
             value={selectedTask?.description}
             onChange={(e) => {
-              if (selectedTask) {
-                setSelectedTask({
-                  ...selectedTask,
-                  description: e.target.value,
-                });
-              }
+              handleInputChange(e, "description");
             }}
           />
           <input
@@ -263,12 +260,7 @@ export default function MyTask() {
             placeholder="User Create"
             value={selectedTask?.usercreate}
             onChange={(e) => {
-              if (selectedTask) {
-                setSelectedTask({
-                  ...selectedTask,
-                  usercreate: e.target.value,
-                });
-              }
+              handleInputChange(e, "usercreate");
             }}
           />
           <input
@@ -277,12 +269,7 @@ export default function MyTask() {
             placeholder="Responsibility"
             value={selectedTask?.responsibility}
             onChange={(e) => {
-              if (selectedTask) {
-                setSelectedTask({
-                  ...selectedTask,
-                  responsibility: e.target.value,
-                });
-              }
+              handleInputChange(e, "responsibility");
             }}
           />
           <select
@@ -291,9 +278,7 @@ export default function MyTask() {
             id="status"
             value={selectedTask?.status}
             onChange={(e) => {
-              if (selectedTask) {
-                setSelectedTask({ ...selectedTask, status: e.target.value });
-              }
+              handleInputChange(e, "status");
             }}
           >
             <option value="todo">Pending</option>
@@ -310,14 +295,14 @@ export default function MyTask() {
       </Modal>
       <Modal isOpen={del.isOpen} onClose={del.toggle}>
         <div className="flex w-full flex-col gap-4">
-          <h1 className="text-2xl font-bold">Delete Task</h1>
+          <h1 className="text-2xl font-bold text-red-500">Delete Task</h1>
           <p>
             Are you sure you want to delete this task with id {selectedTask?.id}
             ?
           </p>
           <div className="flex justify-end gap-2">
             <button
-              className="rounded bg-sky-500 px-2 py-1 text-white transition-colors hover:bg-sky-600"
+              className="rounded border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-500 hover:text-white"
               onClick={del.toggle}
             >
               Cancel

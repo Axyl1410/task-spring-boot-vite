@@ -5,4 +5,5 @@ export interface Task {
   usercreate: string;
   responsibility: string;
   status: string;
+  progress: string;
 }

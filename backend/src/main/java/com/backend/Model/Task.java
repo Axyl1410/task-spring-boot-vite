@@ -1,6 +1,7 @@
 package com.backend.Model;
 
-import com.backend.Enum.TaskEnum;
+import com.backend.Enum.TaskProgressEnum;
+import com.backend.Enum.TaskStatusEnum;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +27,9 @@ public class Task {
   private String title;
   private String description;
   @Enumerated(EnumType.STRING)
-  private TaskEnum status;
+  private TaskStatusEnum status;
   private String usercreate;
   private String responsibility;
+  @Enumerated(EnumType.STRING)
+  private TaskProgressEnum progress;
 }

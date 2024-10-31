@@ -2,19 +2,26 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 import Transition from "../components/common/Transition";
+import { useToast } from "../components/toast/ToastContext";
 import Modal from "../components/ui/Modal";
 import type { User } from "../constants/User";
 import useToggle from "../hooks/useToggle";
+
 export default function User() {
   const [user, setUser] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const admin = "admin" === localStorage.getItem("role");
+  const [addUsers, setAddUsers] = useState<User>();
+
   const create = useToggle();
   const edit = useToggle();
   const del = useToggle();
+  const { addToast } = useToast();
+
+  const admin = "admin" === localStorage.getItem("role");
   if (!admin) {
     window.location.href = "/no-permission";
   }
+
   const fetchUser = async () => {
     try {
       const response = await api.get("api/v1/user/");
@@ -23,9 +30,76 @@ export default function User() {
       setUser([]);
     }
   };
+
+  const addUser = async () => {
+    console.log(addUsers);
+    try {
+      const response = await api.post("api/v1/user/create", {
+        username: addUsers?.username,
+        password: addUsers?.password,
+        role: addUsers?.role,
+      });
+
+      if (response.data) {
+        addToast("Add user success", "success");
+        fetchUser();
+      } else {
+        addToast("Add user failed", "error");
+      }
+    } catch {
+      addToast("Add user failed", "error");
+    }
+  };
+
+  const updateUser = async () => {
+    try {
+      const response = await api.put(`api/v1/user/update/${selectedUser?.id}`, {
+        username: selectedUser?.username,
+        password: selectedUser?.password,
+        role: selectedUser?.role,
+      });
+      if (response.data) {
+        addToast("Update user success", "success");
+        fetchUser();
+      } else {
+        addToast("Update user failed", "error");
+      }
+    } catch {
+      addToast("Update user failed", "error");
+    }
+  };
+
+  const deleteUser = async (username: string) => {
+    try {
+      const response = await api.delete(`api/v1/user/delete/${username}`);
+      if (response.data) {
+        addToast("Delete user success", "success");
+        fetchUser();
+      } else {
+        addToast("Delete user failed", "error");
+      }
+    } catch {
+      addToast("Delete user failed", "error");
+    }
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
+
+  const handleEditUser = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    field: keyof User,
+  ) => {
+    setSelectedUser((prev) => ({ ...prev, [field]: e.target.value }) as User);
+  };
+
+  const handleAddUser = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    field: keyof User,
+  ) => {
+    setAddUsers((prev) => ({ ...prev, [field]: e.target.value }) as User);
+  };
 
   return (
     <>
@@ -110,28 +184,38 @@ export default function User() {
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Username"
+            onChange={(e) => handleAddUser(e, "username")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
+            onChange={(e) => {
+              handleAddUser(e, "password");
+            }}
           />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
-            name="role"
-            id="role"
+            onChange={(e) => handleAddUser(e, "role")}
           >
-            <option value="admin">Admin</option>
+            <option value="">Select Role</option>
             <option value="user">User</option>
+            <option value="admin">Admin</option>
           </select>
           <div className="flex justify-end gap-2">
             <button
-              className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+              className="rounded border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-500 hover:text-white"
               onClick={create.toggle}
             >
               Cancel
             </button>
-            <button className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600">
+            <button
+              className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
+              onClick={() => {
+                addUser();
+                create.toggle();
+              }}
+            >
               Create
             </button>
           </div>
@@ -145,55 +229,37 @@ export default function User() {
             type="text"
             placeholder="Username"
             value={selectedUser?.username || ""}
-            onChange={(e) =>
-              setSelectedUser({
-                ...selectedUser,
-                username: e.target.value,
-                id: selectedUser?.id || 0,
-                password: selectedUser?.password || "",
-                role: selectedUser?.role || "",
-              })
-            }
+            onChange={(e) => handleEditUser(e, "username")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
             value={selectedUser?.password || ""}
-            onChange={(e) =>
-              setSelectedUser({
-                ...selectedUser,
-                password: e.target.value,
-                id: selectedUser?.id || 0,
-                username: selectedUser?.username || "",
-                role: selectedUser?.role || "",
-              })
-            }
+            onChange={(e) => handleEditUser(e, "password")}
           />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             value={selectedUser?.role || ""}
-            onChange={(e) =>
-              setSelectedUser({
-                ...selectedUser,
-                role: e.target.value,
-                id: selectedUser?.id || 0,
-                username: selectedUser?.username || "",
-                password: selectedUser?.password || "",
-              })
-            }
+            onChange={(e) => handleEditUser(e, "role")}
           >
             <option value="admin">Admin</option>
             <option value="user">User</option>
           </select>
           <div className="flex justify-end gap-2">
             <button
-              className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+              className="rounded border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-500 hover:text-white"
               onClick={edit.toggle}
             >
               Cancel
             </button>
-            <button className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600">
+            <button
+              className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
+              onClick={() => {
+                updateUser();
+                edit.toggle();
+              }}
+            >
               Edit
             </button>
           </div>
@@ -212,12 +278,18 @@ export default function User() {
           </p>
           <div className="flex justify-end gap-2">
             <button
-              className="rounded bg-sky-500 px-2 py-1 text-white transition-colors hover:bg-sky-600"
+              className="rounded border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-600 hover:text-white"
               onClick={del.toggle}
             >
               Cancel
             </button>
-            <button className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600">
+            <button
+              className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+              onClick={() => {
+                deleteUser(selectedUser?.username || "");
+                del.toggle();
+              }}
+            >
               Delete
             </button>
           </div>

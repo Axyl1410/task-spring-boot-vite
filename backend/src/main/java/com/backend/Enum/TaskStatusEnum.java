@@ -1,5 +1,5 @@
 package com.backend.Enum;
 
-public enum TaskEnum {
+public enum TaskStatusEnum {
   pending, in_progress, completed
 }

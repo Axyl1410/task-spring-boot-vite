@@ -37,7 +37,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      <div className="fixed right-2 top-2 z-20 space-y-2 sm:right-4 sm:top-4">
+      <div className="fixed right-2 top-2 z-[9999] space-y-2 sm:right-4 sm:top-4">
         <AnimatePresence>
           {toasts.map((toast) => (
             <Toast
