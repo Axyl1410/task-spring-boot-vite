@@ -36,9 +36,9 @@ export default function Sidebar() {
   return (
     <>
       <motion.div
-        className="flex h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4"
+        className="flex h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4 shadow-md"
         layout
-        animate={{ width: sidebar.isOpen ? "240px" : "80px" }}
+        animate={{ width: sidebar.isOpen ? "240px" : "60px" }}
         transition={{
           duration: 0.3,
           type: "spring",
@@ -110,8 +110,8 @@ export default function Sidebar() {
       </motion.div>
 
       <Modal isOpen={modal.isOpen} onClose={modal.close}>
-        <div className="flex flex-col gap-2 p-2">
-          <h1 className="text-center text-xl font-bold">
+        <div className="flex w-full flex-col gap-2 p-2">
+          <h1 className="text-xl font-bold">
             Are you sure you want to sign out?
           </h1>
           <p>You will be redirected to the login page</p>

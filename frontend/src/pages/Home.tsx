@@ -1,4 +1,5 @@
 import Transition from "../components/common/Transition";
+import { cn } from "../lib/utils";
 
 interface TaskSectionProps {
   title: string;
@@ -7,13 +8,13 @@ interface TaskSectionProps {
 }
 
 const TaskSection = ({ title, tasks, gradient }: TaskSectionProps) => (
-  <div className="relative w-1/4 rounded-md bg-white p-4">
+  <div className="relative w-1/4 rounded-md bg-white p-4 shadow-md">
     <h2 className="text-lg font-bold">{title}</h2>
     {tasks.map((task, index) => (
       <p key={index}>{task}</p>
     ))}
     <div
-      className={`absolute left-0 top-0 h-1 w-full rounded-t-md ${gradient}`}
+      className={cn("absolute left-0 top-0 h-1 w-full rounded-t-md", gradient)}
     ></div>
   </div>
 );
@@ -47,8 +48,8 @@ export default function Home() {
 
   return (
     <Transition>
-      <div className="flex w-full flex-col gap-8">
-        <div>
+      <div className="flex w-full flex-col gap-4">
+        <div className="rounded-md bg-white p-4 shadow-md">
           <h1 className="text-lg font-bold">Hello {username}!</h1>
           <p>Your role is {role}</p>
         </div>
