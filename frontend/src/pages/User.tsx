@@ -9,8 +9,7 @@ import useToggle from "../hooks/useToggle";
 
 export default function User() {
   const [user, setUser] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [addUsers, setAddUsers] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState<User>();
 
   const create = useToggle();
   const edit = useToggle();
@@ -32,17 +31,18 @@ export default function User() {
   };
 
   const addUser = async () => {
-    console.log(addUsers);
     try {
       const response = await api.post("api/v1/user/create", {
-        username: addUsers?.username,
-        password: addUsers?.password,
-        role: addUsers?.role,
+        username: selectedUser?.username,
+        password: selectedUser?.password,
+        role: selectedUser?.role,
       });
 
       if (response.data) {
         addToast("Add user success", "success");
         fetchUser();
+        create.toggle();
+        setSelectedUser(undefined);
       } else {
         addToast("Add user failed", "error");
       }
@@ -61,6 +61,8 @@ export default function User() {
       if (response.data) {
         addToast("Update user success", "success");
         fetchUser();
+        edit.toggle();
+        setSelectedUser(undefined);
       } else {
         addToast("Update user failed", "error");
       }
@@ -75,6 +77,8 @@ export default function User() {
       if (response.data) {
         addToast("Delete user success", "success");
         fetchUser();
+        del.toggle();
+        setSelectedUser(undefined);
       } else {
         addToast("Delete user failed", "error");
       }
@@ -87,18 +91,11 @@ export default function User() {
     fetchUser();
   }, []);
 
-  const handleEditUser = (
+  const handleUser = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     field: keyof User,
   ) => {
     setSelectedUser((prev) => ({ ...prev, [field]: e.target.value }) as User);
-  };
-
-  const handleAddUser = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    field: keyof User,
-  ) => {
-    setAddUsers((prev) => ({ ...prev, [field]: e.target.value }) as User);
   };
 
   return (
@@ -138,7 +135,7 @@ export default function User() {
                   <th className="border border-gray-300 py-1">ID</th>
                   <th className="border border-gray-300 py-1">Username</th>
                   <th className="border border-gray-300 py-1">Role</th>
-                  <th className="border border-gray-300 py-1">Action</th>
+                  <th className="w-1/6 border border-gray-300 py-1">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,19 +181,17 @@ export default function User() {
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Username"
-            onChange={(e) => handleAddUser(e, "username")}
+            onChange={(e) => handleUser(e, "username")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
-            onChange={(e) => {
-              handleAddUser(e, "password");
-            }}
+            onChange={(e) => handleUser(e, "password")}
           />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
-            onChange={(e) => handleAddUser(e, "role")}
+            onChange={(e) => handleUser(e, "role")}
           >
             <option value="">Select Role</option>
             <option value="user">User</option>
@@ -211,10 +206,7 @@ export default function User() {
             </button>
             <button
               className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
-              onClick={() => {
-                addUser();
-                create.toggle();
-              }}
+              onClick={() => addUser()}
             >
               Create
             </button>
@@ -229,20 +221,21 @@ export default function User() {
             type="text"
             placeholder="Username"
             value={selectedUser?.username || ""}
-            onChange={(e) => handleEditUser(e, "username")}
+            onChange={(e) => handleUser(e, "username")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
             value={selectedUser?.password || ""}
-            onChange={(e) => handleEditUser(e, "password")}
+            onChange={(e) => handleUser(e, "password")}
           />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             value={selectedUser?.role || ""}
-            onChange={(e) => handleEditUser(e, "role")}
+            onChange={(e) => handleUser(e, "role")}
           >
+            <option value="">Select Role</option>
             <option value="admin">Admin</option>
             <option value="user">User</option>
           </select>
@@ -255,10 +248,7 @@ export default function User() {
             </button>
             <button
               className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
-              onClick={() => {
-                updateUser();
-                edit.toggle();
-              }}
+              onClick={() => updateUser()}
             >
               Edit
             </button>
@@ -285,10 +275,7 @@ export default function User() {
             </button>
             <button
               className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
-              onClick={() => {
-                deleteUser(selectedUser?.username || "");
-                del.toggle();
-              }}
+              onClick={() => deleteUser(selectedUser?.username || "")}
             >
               Delete
             </button>

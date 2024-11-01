@@ -2,17 +2,19 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
 import Transition from "../components/common/Transition";
+import { useToast } from "../components/toast/ToastContext";
 import Modal from "../components/ui/Modal";
 import type { Task } from "../constants/Task";
 import useToggle from "../hooks/useToggle";
 export default function MyTask() {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [task, setTask] = useState<Task[]>([]);
   const [taskResponsibility, setTaskResponsibility] = useState<Task[]>([]);
+  const [selectedTask, setSelectedTask] = useState<Task>();
 
   const create = useToggle();
   const edit = useToggle();
   const del = useToggle();
+  const { addToast } = useToast();
 
   const fetchTasks = async (
     endpoint: string,
@@ -23,6 +25,61 @@ export default function MyTask() {
       setter(response.data);
     } catch {
       setter([]);
+    }
+  };
+
+  const addTask = async () => {
+    try {
+      const response = await api.post("api/v1/task/create", {
+        title: selectedTask?.title,
+        description: selectedTask?.description,
+        usercreate: selectedTask?.usercreate,
+        responsibility: selectedTask?.responsibility,
+        status: selectedTask?.status,
+        progress: selectedTask?.progress,
+      });
+
+      if (response.data) {
+        addToast("Add task success", "success");
+        create.toggle();
+        setSelectedTask(undefined);
+      } else addToast("Add task failed", "error");
+    } catch {
+      addToast("Add task failed", "error");
+    }
+  };
+
+  const updateTask = async () => {
+    try {
+      const response = await api.put(`api/v1/task/update/${selectedTask?.id}`, {
+        title: selectedTask?.title,
+        description: selectedTask?.description,
+        usercreate: selectedTask?.usercreate,
+        responsibility: selectedTask?.responsibility,
+        status: selectedTask?.status,
+        progress: selectedTask?.progress,
+      });
+
+      if (response.data) {
+        addToast("Update task success", "success");
+        edit.toggle();
+        setSelectedTask(undefined);
+      } else addToast("Update task failed", "error");
+    } catch {
+      addToast("Update task failed", "error");
+    }
+  };
+
+  const deleteTask = async (id: number) => {
+    try {
+      const response = await api.delete(`api/v1/task/delete/${id}`);
+      if (response.data) {
+        addToast("Delete task success", "success");
+        del.toggle();
+        setSelectedTask(undefined);
+      } else addToast("Delete task failed", "error");
+    } catch {
+      addToast("Delete task failed", "error");
     }
   };
 
@@ -37,7 +94,7 @@ export default function MyTask() {
     }
   }, []);
 
-  const handleInputChange = (
+  const handleTask = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     field: keyof Task,
   ) => {
@@ -64,7 +121,7 @@ export default function MyTask() {
           </div>
           {task.length === 0 ? (
             <motion.p
-              className="text-center text-lg font-bold"
+              className="text-center text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -129,7 +186,7 @@ export default function MyTask() {
           <h1 className="text-2xl font-bold">My Responsibility</h1>
           {taskResponsibility.length === 0 ? (
             <motion.p
-              className="text-center text-lg font-bold"
+              className="text-center text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -200,37 +257,70 @@ export default function MyTask() {
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Title"
+            onChange={(e) => handleTask(e, "title")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Description"
+            onChange={(e) => handleTask(e, "description")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="User Create"
+            onChange={(e) => handleTask(e, "usercreate")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Responsibility"
+            onChange={(e) => handleTask(e, "responsibility")}
+          />
+          <input
+            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            type="text"
+            placeholder="Progress"
+            onChange={(e) => handleTask(e, "progress")}
           />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="status"
             id="status"
+            onChange={(e) => handleTask(e, "status")}
           >
+            <option value="">Select Status</option>
             <option value="todo">Pending</option>
             <option value="progress">Progress</option>
             <option value="done">Done</option>
           </select>
-          <button
-            className="rounded bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
-            onClick={create.toggle}
+          <select
+            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            name="progress"
+            id="progress"
+            onChange={(e) => handleTask(e, "progress")}
           >
-            Create
-          </button>
+            <option value="">Choose Progress</option>
+            <option value="analyzing">Analyzing</option>
+            <option value="developing">Developing</option>
+            <option value="test_attempting">Test Attempting</option>
+            <option value="test_failed">Test Failed</option>
+            <option value="test_success">Test Success</option>
+          </select>
+          <div className="flex justify-end gap-2">
+            <button
+              className="rounded border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-500 hover:text-white"
+              onClick={create.toggle}
+            >
+              Cancel
+            </button>
+            <button
+              className="rounded bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
+              onClick={() => addTask()}
+            >
+              Create
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal isOpen={edit.isOpen} onClose={edit.toggle}>
@@ -241,56 +331,69 @@ export default function MyTask() {
             type="text"
             placeholder="Title"
             value={selectedTask?.title}
-            onChange={(e) => {
-              handleInputChange(e, "title");
-            }}
+            onChange={(e) => handleTask(e, "title")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Description"
             value={selectedTask?.description}
-            onChange={(e) => {
-              handleInputChange(e, "description");
-            }}
+            onChange={(e) => handleTask(e, "description")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="User Create"
             value={selectedTask?.usercreate}
-            onChange={(e) => {
-              handleInputChange(e, "usercreate");
-            }}
+            onChange={(e) => handleTask(e, "usercreate")}
           />
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Responsibility"
             value={selectedTask?.responsibility}
-            onChange={(e) => {
-              handleInputChange(e, "responsibility");
-            }}
+            onChange={(e) => handleTask(e, "responsibility")}
           />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="status"
             id="status"
             value={selectedTask?.status}
-            onChange={(e) => {
-              handleInputChange(e, "status");
-            }}
+            onChange={(e) => handleTask(e, "status")}
           >
-            <option value="todo">Pending</option>
-            <option value="progress">Progress</option>
-            <option value="done">Done</option>
+            <option value="">Select Status</option>
+            <option value="pending">Pending</option>
+            <option value="in_progress">Progress</option>
+            <option value="completed">Done</option>
           </select>
-          <button
-            className="rounded bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
-            onClick={edit.toggle}
+          <select
+            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            name="progress"
+            id="progress"
+            value={selectedTask?.progress}
+            onChange={(e) => handleTask(e, "progress")}
           >
-            Edit
-          </button>
+            <option value="">Choose Progress</option>
+            <option value="analyzing">Analyzing</option>
+            <option value="developing">Developing</option>
+            <option value="test_attempting">Test Attempting</option>
+            <option value="test_failed">Test Failed</option>
+            <option value="test_success">Test Success</option>
+          </select>
+          <div className="flex justify-end gap-2">
+            <button
+              className="rounded border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-500 hover:text-white"
+              onClick={edit.toggle}
+            >
+              Cancel
+            </button>
+            <button
+              className="rounded bg-indigo-500 px-4 py-2 text-white transition-colors hover:bg-indigo-600"
+              onClick={() => updateTask()}
+            >
+              Edit
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal isOpen={del.isOpen} onClose={del.toggle}>
@@ -307,7 +410,12 @@ export default function MyTask() {
             >
               Cancel
             </button>
-            <button className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600">
+            <button
+              className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+              onClick={() => {
+                if (selectedTask) deleteTask(selectedTask?.id);
+              }}
+            >
               Delete
             </button>
           </div>
