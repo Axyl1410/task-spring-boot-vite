@@ -118,7 +118,7 @@ export default function User() {
           </div>
           {user.length === 0 ? (
             <motion.p
-              className="text-center text-lg font-bold"
+              className="text-center text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >

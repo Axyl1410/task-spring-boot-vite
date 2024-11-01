@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
@@ -145,8 +146,8 @@ export default function Task() {
               <tbody>
                 {task.map((t) => (
                   <tr
-                    key={t.id}
                     className="p-2 text-center transition-colors hover:bg-gray-100"
+                    key={t.id}
                   >
                     <td className="border border-gray-300">{t.id}</td>
                     <td className="border border-gray-300">{t.title}</td>
@@ -165,6 +166,11 @@ export default function Task() {
                       >
                         Edit
                       </button>
+                      <Link to={`/task/${t.id}`}>
+                        <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
+                          Detail
+                        </button>
+                      </Link>
                       <button
                         className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
                         onClick={() => {

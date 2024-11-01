@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
@@ -168,6 +169,11 @@ export default function MyTask() {
                       >
                         Edit
                       </button>
+                      <Link to={`/task/${t.id}`}>
+                        <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
+                          Detail
+                        </button>
+                      </Link>
                       <button
                         className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
                         onClick={() => {
@@ -233,6 +239,11 @@ export default function MyTask() {
                       >
                         Edit
                       </button>
+                      <Link to={`/task/${t.id}`}>
+                        <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
+                          Detail
+                        </button>
+                      </Link>
                       <button
                         className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
                         onClick={() => {
