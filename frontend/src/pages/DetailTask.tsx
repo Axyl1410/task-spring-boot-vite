@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import api from "../api/axiosConfig";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
+import BackButton from "../components/ui/BackButton";
 import Modal from "../components/ui/Modal";
 import type { Task } from "../constants/Task";
 import useToggle from "../hooks/useToggle";
@@ -11,8 +12,6 @@ export default function DetailTask() {
   const { id } = useParams<{ id: string }>();
   const [task, setTask] = useState<Task>();
   const [selectedTask, setSelectedTask] = useState<Task>();
-
-  const username = localStorage.getItem("username");
 
   const edit = useToggle();
   const del = useToggle();
@@ -52,11 +51,21 @@ export default function DetailTask() {
     }
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`api/v1/task/${id}`);
+      if (response.data.error) addToast(response.data.error, "error");
+      else {
+        setTask(response.data.task);
+        setSelectedTask(response.data.task);
+      }
+    } catch {
+      addToast("Get task failed", "error");
+    }
+  };
+
   useEffect(() => {
-    api.get(`api/v1/task/${id}`).then((response) => {
-      setTask(response.data);
-      setSelectedTask(response.data);
-    });
+    fetchData();
   }, [id]);
 
   const handleTask = (
@@ -106,11 +115,7 @@ export default function DetailTask() {
                 >
                   Delete
                 </button>
-                <Link to="/task">
-                  <button className="border border-gray-500 px-2 py-1 transition-colors hover:bg-gray-500 hover:text-white">
-                    Back
-                  </button>
-                </Link>
+                <BackButton classValue="border border-gray-500 px-2 py-1  hover:bg-gray-500 hover:text-white" />
               </div>
             </div>
           </div>

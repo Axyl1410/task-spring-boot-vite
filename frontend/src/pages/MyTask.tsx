@@ -34,7 +34,7 @@ export default function MyTask() {
       const response = await api.post("api/v1/task/create", {
         title: selectedTask?.title,
         description: selectedTask?.description,
-        usercreate: selectedTask?.usercreate,
+        usercreate: localStorage.getItem("username"),
         responsibility: selectedTask?.responsibility,
         status: selectedTask?.status,
         progress: selectedTask?.progress,
@@ -282,12 +282,12 @@ export default function MyTask() {
             placeholder="Description"
             onChange={(e) => handleTask(e, "description")}
           />
-          <input
+          {/* <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="User Create"
             onChange={(e) => handleTask(e, "usercreate")}
-          />
+          /> */}
           <input
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
