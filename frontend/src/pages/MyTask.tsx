@@ -43,6 +43,8 @@ export default function MyTask() {
       if (response.data) {
         addToast("Add task success", "success");
         create.toggle();
+        fetchTasks("api/v1/task/", setTask);
+        fetchTasks("api/v1/task/", setTaskResponsibility);
         setSelectedTask(undefined);
       } else addToast("Add task failed", "error");
     } catch {
@@ -64,6 +66,8 @@ export default function MyTask() {
       if (response.data) {
         addToast("Update task success", "success");
         edit.toggle();
+        fetchTasks("api/v1/task/", setTask);
+        fetchTasks("api/v1/task/", setTaskResponsibility);
         setSelectedTask(undefined);
       } else addToast("Update task failed", "error");
     } catch {
@@ -77,6 +81,8 @@ export default function MyTask() {
       if (response.data) {
         addToast("Delete task success", "success");
         del.toggle();
+        fetchTasks("api/v1/task/", setTask);
+        fetchTasks("api/v1/task/", setTaskResponsibility);
         setSelectedTask(undefined);
       } else addToast("Delete task failed", "error");
     } catch {
@@ -288,12 +294,6 @@ export default function MyTask() {
             placeholder="Responsibility"
             onChange={(e) => handleTask(e, "responsibility")}
           />
-          <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
-            type="text"
-            placeholder="Progress"
-            onChange={(e) => handleTask(e, "progress")}
-          />
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="status"
@@ -301,9 +301,9 @@ export default function MyTask() {
             onChange={(e) => handleTask(e, "status")}
           >
             <option value="">Select Status</option>
-            <option value="todo">Pending</option>
-            <option value="progress">Progress</option>
-            <option value="done">Done</option>
+            <option value="pending">Pending</option>
+            <option value="in_progress">Progress</option>
+            <option value="completed">Done</option>
           </select>
           <select
             className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"

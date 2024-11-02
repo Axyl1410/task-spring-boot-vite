@@ -1,7 +1,11 @@
 package com.backend.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.backend.Auth.JWTUtility;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +18,7 @@ import com.backend.Service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
   @Autowired
   private UserService userService;
@@ -32,18 +37,29 @@ public class UserController {
 
   @PreAuthorize("hasRole('admin')")
   @DeleteMapping("/delete/{username}")
-  public ResponseEntity<?> deleteUserByUsername(@PathVariable String username) {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String currentUsername = authentication.getName();
-    User currentUser = userService.findByUsername(currentUsername);
+  public Map<String, String> deleteUser(@PathVariable String username, HttpServletRequest request) {
+    String authorizationHeader = request.getHeader("Authorization");
+    Map<String, String> response = new HashMap<>();
 
-    if (currentUser != null && currentUser.getUsername().equalsIgnoreCase(username)) {
-      return ResponseEntity.notFound().build();
+    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+      response.put("error", "Authorization header is missing or invalid.");
+      return response;
     }
 
-    User deletedUser = userService.deleteUserByUsername(username);
-    return ResponseEntity.ok(deletedUser);
-  }
+    String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
+    String loggedInUsername = JWTUtility.extractUsername(token);
+
+    if (loggedInUsername.equals(username)) {
+      response.put("error", "You cannot delete your own account.");
+    } else {
+       User isDeleted = userService.deleteUserByUsername(username);
+        if (isDeleted != null) {
+          response.put("success", "User deleted successfully.");
+        } else {
+          response.put("error", "User not found.");
+        }
+    }
+    return response;}
 
   @PreAuthorize("hasRole('admin')")
   @PostMapping("/create")

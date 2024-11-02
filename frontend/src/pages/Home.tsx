@@ -23,6 +23,8 @@ export default function Home() {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
 
+  console.log(localStorage.getItem("token"));
+
   const sections = [
     {
       title: "Latest Task",

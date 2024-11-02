@@ -12,6 +12,8 @@ export default function DetailTask() {
   const [task, setTask] = useState<Task>();
   const [selectedTask, setSelectedTask] = useState<Task>();
 
+  const username = localStorage.getItem("username");
+
   const edit = useToggle();
   const del = useToggle();
   const { addToast } = useToast();

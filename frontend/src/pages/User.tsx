@@ -74,7 +74,7 @@ export default function User() {
   const deleteUser = async (username: string) => {
     try {
       const response = await api.delete(`api/v1/user/delete/${username}`);
-      if (response.data) {
+      if (response.data.success) {
         addToast("Delete user success", "success");
         fetchUser();
         del.toggle();

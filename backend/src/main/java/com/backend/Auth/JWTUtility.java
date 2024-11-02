@@ -44,4 +44,8 @@ public class JWTUtility {
 	public static String extractRole(String token) {
 		return extractClaims(token).get("role", String.class);
 	}
+
+	public static String extractUsername(String token) {
+		return extractClaims(token).getSubject();
+	}
 }
