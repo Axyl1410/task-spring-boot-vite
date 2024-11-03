@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axiosConfig";
+import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
 import BackButton from "../components/ui/BackButton";
@@ -12,6 +13,12 @@ export default function DetailTask() {
   const { id } = useParams<{ id: string }>();
   const [task, setTask] = useState<Task>();
   const [selectedTask, setSelectedTask] = useState<Task>();
+
+  const checkToken = CheckToken();
+  if (!checkToken) {
+    localStorage.clear();
+    window.location.href = "/login";
+  }
 
   const edit = useToggle();
   const del = useToggle();
@@ -54,7 +61,8 @@ export default function DetailTask() {
   const fetchData = async () => {
     try {
       const response = await api.get(`api/v1/task/${id}`);
-      if (response.data.error) addToast(response.data.error, "error");
+      if (response.data.error)
+        addToast(response.data.error || "Get task failed", "error");
       else {
         setTask(response.data.task);
         setSelectedTask(response.data.task);

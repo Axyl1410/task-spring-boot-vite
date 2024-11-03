@@ -1,4 +1,4 @@
-package com.backend.Auth;
+package com.backend.Model;
 
 import lombok.Getter;
 import lombok.Setter;

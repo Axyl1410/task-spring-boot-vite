@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axiosConfig";
+import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
 import Modal from "../components/ui/Modal";
@@ -11,6 +12,12 @@ import useToggle from "../hooks/useToggle";
 export default function Task() {
   const [task, setTask] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task>();
+
+  const checkToken = CheckToken();
+  if (!checkToken) {
+    localStorage.clear();
+    window.location.href = "/login";
+  }
 
   const create = useToggle();
   const edit = useToggle();

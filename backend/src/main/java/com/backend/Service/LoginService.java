@@ -1,5 +1,7 @@
-package com.backend.Auth;
+package com.backend.Service;
 
+import com.backend.Auth.JWTUtility;
+import com.backend.Repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

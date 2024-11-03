@@ -1,3 +1,4 @@
+import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import { cn } from "../lib/utils";
 
@@ -23,7 +24,11 @@ export default function Home() {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
 
-  console.log(localStorage.getItem("token"));
+  const checkToken = CheckToken();
+  if (!checkToken) {
+    localStorage.clear();
+    window.location.href = "/login";
+  }
 
   const sections = [
     {

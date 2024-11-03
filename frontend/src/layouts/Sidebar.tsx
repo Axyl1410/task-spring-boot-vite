@@ -125,9 +125,7 @@ export default function Sidebar() {
             <a
               href="/login"
               onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("username");
-                localStorage.removeItem("role");
+                localStorage.clear();
                 window.location.href = "/login";
               }}
             >

@@ -33,11 +33,11 @@ public class JWTUtility {
 				.getBody();
 	}
 
-	public boolean validateToken(String token, String username) {
+	public static boolean validateToken(String token, String username) {
 		return username.equals(extractClaims(token).getSubject()) && !isTokenExpired(token);
 	}
 
-	private boolean isTokenExpired(String token) {
+	private static boolean isTokenExpired(String token) {
 		return extractClaims(token).getExpiration().before(new Date());
 	}
 

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import api from "../api/axiosConfig";
+import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
 import Modal from "../components/ui/Modal";
@@ -10,6 +11,12 @@ import useToggle from "../hooks/useToggle";
 export default function User() {
   const [user, setUser] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>();
+
+  const checkToken = CheckToken();
+  if (!checkToken) {
+    localStorage.clear();
+    window.location.href = "/login";
+  }
 
   const create = useToggle();
   const edit = useToggle();
@@ -75,12 +82,12 @@ export default function User() {
     try {
       const response = await api.delete(`api/v1/user/delete/${username}`);
       if (response.data.success) {
-        addToast("Delete user success", "success");
+        addToast(response.data.success || "Delete user success", "success");
         fetchUser();
         del.toggle();
         setSelectedUser(undefined);
       } else {
-        addToast("Delete user failed", "error");
+        addToast(response.data.error || "Delete user failed", "error");
       }
     } catch {
       addToast("Delete user failed", "error");
