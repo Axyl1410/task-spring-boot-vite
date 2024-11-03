@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import api from "../api/axiosConfig";
 import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
+import { Task } from "../constants/Task";
 import { cn } from "../lib/utils";
 
 interface TaskSectionProps {
@@ -9,21 +11,22 @@ interface TaskSectionProps {
   gradient: string;
 }
 
-const TaskSection = ({ title, tasks, gradient }: TaskSectionProps) => (
-  <div className="relative w-1/4 rounded-md bg-white p-4 shadow-md">
-    <h2 className="text-lg font-bold">{title}</h2>
-    {tasks.map((task, index) => (
-      <p key={index}>{task}</p>
-    ))}
-    <div
-      className={cn("absolute left-0 top-0 h-1 w-full rounded-t-md", gradient)}
-    ></div>
-  </div>
-);
+const fetchTasks = async (
+  endpoint: string,
+  setter: React.Dispatch<React.SetStateAction<Task[]>>,
+) => {
+  try {
+    const response = await api.get(endpoint);
+    setter(response.data);
+  } catch {
+    setter([]);
+  }
+};
 
 export default function Home() {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -35,12 +38,13 @@ export default function Home() {
       }
     };
     checkToken();
+    fetchTasks("api/v1/task/ten", setTasks);
   }, []);
 
   const sections = [
     {
       title: "Latest Task",
-      tasks: ["Task 1", "Task 2", "Task 3"],
+      tasks: tasks.map((task) => task.title),
       gradient: "bg-gradient-to-r from-indigo-400 to-indigo-500",
     },
     {
@@ -63,7 +67,7 @@ export default function Home() {
   return (
     <Transition>
       <div className="flex w-full flex-col gap-4">
-        <div className="rounded-md bg-white p-4 shadow-md">
+        <div className="dark:bg-dark_secondary rounded-md bg-white p-4 shadow-md transition-colors dark:text-white">
           <h1 className="text-lg font-bold">Hello {username}!</h1>
           <p>Your role is {role}</p>
         </div>
@@ -76,3 +80,15 @@ export default function Home() {
     </Transition>
   );
 }
+
+const TaskSection = ({ title, tasks, gradient }: TaskSectionProps) => (
+  <div className="dark:bg-dark_secondary relative w-1/4 rounded-md bg-white p-4 shadow-md transition-colors dark:text-white">
+    <h2 className="text-lg font-bold">{title}</h2>
+    {tasks.map((task, index) => (
+      <p key={index}>- {task}</p>
+    ))}
+    <div
+      className={cn("absolute left-0 top-0 h-1 w-full rounded-t-md", gradient)}
+    ></div>
+  </div>
+);

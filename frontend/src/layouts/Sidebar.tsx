@@ -4,29 +4,11 @@ import { IoMdMenu } from "react-icons/io";
 import { IoHomeOutline } from "react-icons/io5";
 import { MdPeopleAlt, MdTask } from "react-icons/md";
 import { Link } from "react-router-dom";
+import ThemeSwitch from "../components/theme/ThemeToggle";
 import Modal from "../components/ui/Modal";
 import Tooltip from "../components/ui/Tooltip";
 import useToggle from "../hooks/useToggle";
 import { cn } from "../lib/utils";
-
-function SidebarItem({
-  icon,
-  label,
-  isOpen,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  isOpen: boolean;
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <Tooltip direction="right" content={label} isHidden={isOpen}>
-        {icon}
-      </Tooltip>
-      {isOpen && <h2 className="text-nowrap font-semibold">{label}</h2>}
-    </div>
-  );
-}
 
 export default function Sidebar() {
   const admin = "admin" === localStorage.getItem("role");
@@ -36,7 +18,7 @@ export default function Sidebar() {
   return (
     <>
       <motion.div
-        className="flex h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4 shadow-md"
+        className="dark:bg-dark_secondary flex h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4 shadow-md transition-colors dark:text-white"
         layout
         animate={{ width: sidebar.isOpen ? "240px" : "60px" }}
         transition={{
@@ -98,7 +80,12 @@ export default function Sidebar() {
             </>
           )}
         </div>
-        <div className="flex w-full items-center justify-center border-t border-gray-500 pt-2 font-bold">
+        <div className="flex w-full flex-col items-center justify-center gap-4 border-t border-gray-500 pt-2 font-bold">
+          <SidebarItem
+            icon={<ThemeSwitch />}
+            label="Theme"
+            isOpen={sidebar.isOpen}
+          />
           <div className="cursor-pointer" onClick={modal.toggle}>
             <SidebarItem
               icon={<FiLogIn className="h-6 w-6" />}
@@ -108,7 +95,6 @@ export default function Sidebar() {
           </div>
         </div>
       </motion.div>
-
       <Modal isOpen={modal.isOpen} onClose={modal.close}>
         <div className="flex w-full flex-col gap-2 p-2">
           <h1 className="text-xl font-bold">
@@ -125,7 +111,9 @@ export default function Sidebar() {
             <a
               href="/login"
               onClick={() => {
+                const theme = localStorage.getItem("theme");
                 localStorage.clear();
+                if (theme) localStorage.setItem("theme", theme);
                 window.location.href = "/login";
               }}
             >
@@ -137,5 +125,24 @@ export default function Sidebar() {
         </div>
       </Modal>
     </>
+  );
+}
+
+function SidebarItem({
+  icon,
+  label,
+  isOpen,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  isOpen: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <Tooltip direction="right" content={label} isHidden={isOpen}>
+        {icon}
+      </Tooltip>
+      {isOpen && <h2 className="text-nowrap font-semibold">{label}</h2>}
+    </div>
   );
 }

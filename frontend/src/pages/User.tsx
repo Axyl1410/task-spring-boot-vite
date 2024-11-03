@@ -26,7 +26,7 @@ export default function User() {
         window.location.href = "/login";
       } else {
         const admin = "admin" === localStorage.getItem("role");
-        if (!admin) window.location.href = "/no-permission";
+        !admin ? (window.location.href = "/no-permission") : fetchUser();
       }
     };
     checkToken();
@@ -98,10 +98,6 @@ export default function User() {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
   const handleUser = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     field: keyof User,
@@ -112,7 +108,7 @@ export default function User() {
   return (
     <>
       <Transition>
-        <div className="flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md">
+        <div className="dark:bg-dark_secondary flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md transition-colors dark:text-white">
           <h1 className="text-2xl font-bold">User Manager</h1>
           <div className="flex items-center justify-center gap-2">
             <button
@@ -122,7 +118,7 @@ export default function User() {
               Create User
             </button>
             <input
-              className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+              className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
               type="text"
               placeholder="Search user"
             />
@@ -146,14 +142,14 @@ export default function User() {
                   <th className="border border-gray-300 py-1">ID</th>
                   <th className="border border-gray-300 py-1">Username</th>
                   <th className="border border-gray-300 py-1">Role</th>
-                  <th className="w-1/6 border border-gray-300 py-1">Action</th>
+                  <th className="w-52 border border-gray-300 py-1">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {user.map((u) => (
                   <tr
                     key={u.id}
-                    className="p-2 text-center transition-colors hover:bg-gray-100"
+                    className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     <td className="border border-gray-300">{u.id}</td>
                     <td className="border border-gray-300">{u.username}</td>
@@ -189,19 +185,19 @@ export default function User() {
         <div className="flex w-full flex-col gap-4">
           <h1 className="text-2xl font-bold">Create User</h1>
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Username"
             onChange={(e) => handleUser(e, "username")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
             onChange={(e) => handleUser(e, "password")}
           />
           <select
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             onChange={(e) => handleUser(e, "role")}
           >
             <option value="">Select Role</option>
@@ -228,21 +224,21 @@ export default function User() {
         <div className="flex w-full flex-col gap-4">
           <h1 className="text-2xl font-bold">Edit User</h1>
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Username"
             value={selectedUser?.username || ""}
             onChange={(e) => handleUser(e, "username")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
             value={selectedUser?.password || ""}
             onChange={(e) => handleUser(e, "password")}
           />
           <select
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             value={selectedUser?.role || ""}
             onChange={(e) => handleUser(e, "role")}
           >

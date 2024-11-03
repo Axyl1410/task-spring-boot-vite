@@ -81,4 +81,9 @@ public class TaskController {
   public List<Task> getTasksByResponsibility(@PathVariable String responsibility) {
     return taskService.getTasksByResponsibility(responsibility);
   }
+
+  @GetMapping("/ten")
+  public List<Task> getTasksByPage() {
+    return taskService.getTasksByPage();
+  }
 }

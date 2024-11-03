@@ -1,44 +1,43 @@
-import { Switch } from "@headlessui/react";
-import React, { useEffect, useState } from "react";
-import { cn } from "../../lib/utils";
-
-const ThemeToggle: React.FC = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { IoSunny } from "react-icons/io5";
+import { MdNightsStay } from "react-icons/md";
+export default function ThemeSwitch() {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const storedTheme = localStorage.getItem("theme");
+    const prefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    return storedTheme === "dark" || (!storedTheme && prefersDarkMode);
+  });
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark";
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.add(savedTheme);
-    }
-  }, []);
+    const htmlElement = document.documentElement;
+    const themeValue = isDarkMode ? "dark" : "light";
+
+    htmlElement.classList.toggle("dark", isDarkMode);
+    htmlElement.classList.toggle("light-theme", !isDarkMode);
+    htmlElement.classList.toggle("dark-theme", isDarkMode);
+    localStorage.setItem("theme", themeValue);
+  }, [isDarkMode]);
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.classList.remove(theme);
-    document.documentElement.classList.add(newTheme);
-    localStorage.setItem("theme", newTheme);
+    setIsDarkMode(!isDarkMode);
   };
 
   return (
-    <Switch
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-      className={cn(
-        "relative inline-flex h-5 w-9 items-center rounded-full shadow-sm transition-colors",
-        theme === "dark" ? "bg-gray-800" : "bg-gray-200",
-      )}
+    <motion.div
+      className="flex cursor-pointer items-center justify-center rounded-full transition-colors duration-300"
+      onClick={toggleTheme}
+      whileTap={{ scale: 0.9 }}
+      animate={{ rotate: isDarkMode ? 0 : 180 }}
+      transition={{ duration: 0.5 }}
     >
-      <span
-        aria-hidden="true"
-        className={cn(
-          "inline-block h-3 w-3 transform rounded-full bg-white transition-transform",
-          theme === "dark" ? "translate-x-5" : "translate-x-1",
-        )}
-      />
-    </Switch>
+      {isDarkMode ? (
+        <MdNightsStay className="fill-secondary h-6 w-6" />
+      ) : (
+        <IoSunny className="fill-secondary h-6 w-6" />
+      )}
+    </motion.div>
   );
-};
-
-export default ThemeToggle;
+}

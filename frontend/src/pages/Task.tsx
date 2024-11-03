@@ -27,7 +27,7 @@ export default function Task() {
         window.location.href = "/login";
       } else {
         const admin = "admin" === localStorage.getItem("role");
-        if (!admin) window.location.href = "/no-permission";
+        !admin ? (window.location.href = "/no-permission") : fetchTask();
       }
     };
     checkToken();
@@ -100,10 +100,6 @@ export default function Task() {
     }
   };
 
-  useEffect(() => {
-    fetchTask();
-  });
-
   const handleTask = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     field: keyof Task,
@@ -114,7 +110,7 @@ export default function Task() {
   return (
     <>
       <Transition>
-        <div className="flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md">
+        <div className="dark:bg-dark_secondary flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md transition-colors dark:text-white">
           <h1 className="text-2xl font-bold">Task Manager</h1>
           <div className="flex items-center justify-center gap-2">
             <button
@@ -124,7 +120,7 @@ export default function Task() {
               Create Task
             </button>
             <input
-              className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+              className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
               type="text"
               placeholder="Search task"
             />
@@ -152,13 +148,13 @@ export default function Task() {
                     Responsibility
                   </th>
                   <th className="border border-gray-300 py-1">Status</th>
-                  <th className="border border-gray-300 py-1">Action</th>
+                  <th className="w-52 border border-gray-300 py-1">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {task.map((t) => (
                   <tr
-                    className="p-2 text-center transition-colors hover:bg-gray-100"
+                    className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                     key={t.id}
                   >
                     <td className="border border-gray-300">{t.id}</td>
@@ -204,31 +200,31 @@ export default function Task() {
         <div className="flex w-full flex-col gap-4">
           <h1 className="text-2xl font-bold">Create Task</h1>
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Title"
             onChange={(e) => handleTask(e, "title")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Description"
             onChange={(e) => handleTask(e, "description")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="User Create"
             onChange={(e) => handleTask(e, "usercreate")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Responsibility"
             onChange={(e) => handleTask(e, "responsibility")}
           />
           <select
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="status"
             id="status"
             onChange={(e) => handleTask(e, "status")}
@@ -239,7 +235,7 @@ export default function Task() {
             <option value="completed">Done</option>
           </select>
           <select
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="progress"
             id="progress"
             onChange={(e) => handleTask(e, "progress")}
@@ -271,35 +267,35 @@ export default function Task() {
         <div className="flex w-full flex-col gap-4">
           <h1 className="text-2xl font-bold">Edit Task</h1>
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Title"
             value={selectedTask?.title}
             onChange={(e) => handleTask(e, "title")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Description"
             value={selectedTask?.description}
             onChange={(e) => handleTask(e, "description")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="User Create"
             value={selectedTask?.usercreate}
             onChange={(e) => handleTask(e, "usercreate")}
           />
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             placeholder="Responsibility"
             value={selectedTask?.responsibility}
             onChange={(e) => handleTask(e, "responsibility")}
           />
           <select
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="status"
             id="status"
             value={selectedTask?.status}
@@ -311,7 +307,7 @@ export default function Task() {
             <option value="completed">Done</option>
           </select>
           <select
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             name="progress"
             id="progress"
             value={selectedTask?.progress}

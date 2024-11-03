@@ -6,7 +6,7 @@ import styles from "./Loading.module.css";
 const Loading: React.FC = () => {
   return (
     <Transition>
-      <div className="dark:bg-dark fixed top-0 z-50 h-full w-full bg-white">
+      <div className="dark:bg-dark_primaty fixed top-0 z-50 h-full w-full bg-white transition-colors">
         <svg
           className={cn(styles["lds-ripple"], styles.tea)}
           width="37"

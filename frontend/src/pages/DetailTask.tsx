@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axiosConfig";
 import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import { useToast } from "../components/toast/ToastContext";
 import BackButton from "../components/ui/BackButton";
 import Modal from "../components/ui/Modal";
+import TagColor from "../components/ui/TagColor";
 import type { Task } from "../constants/Task";
 import useToggle from "../hooks/useToggle";
 
@@ -56,8 +57,8 @@ export default function DetailTask() {
       if (response.data) {
         addToast("Delete task success", "success");
         del.toggle();
-        setSelectedTask(undefined);
-        window.location.href = "/task";
+        const navigate = useNavigate();
+        navigate(-1);
       } else addToast("Delete task failed", "error");
     } catch {
       addToast("Delete task failed", "error");
@@ -92,31 +93,26 @@ export default function DetailTask() {
   return (
     <>
       <Transition>
-        <div className="flex flex-col rounded-md bg-white p-4">
-          <h1 className="text-2xl font-bold">
+        <div className="dark:bg-dark_secondary flex flex-col rounded-md bg-white p-4 text-gray-500 transition-colors dark:text-white">
+          <h1 className="text-2xl font-bold text-black dark:text-white">
             {task?.title ? task?.title : "Null"}
           </h1>
           <div className="flex justify-between">
             <div>
-              <p className="text-gray-500">
-                Progress: {task?.progress ? task?.progress : "Null"}
+              <p>Progress: {task?.progress ? task?.progress : "Null"}</p>
+              <p>
+                Status:{" "}
+                <TagColor children={task?.status ? task?.status : "Null"} />
               </p>
-              <p className="text-gray-500">
-                Status: {task?.status ? task?.status : "Null"}
-              </p>
-              <p className="text-gray-500">
-                Create by: {task?.usercreate ? task?.usercreate : "Null"}
-              </p>
+              <p>Create by: {task?.usercreate ? task?.usercreate : "Null"}</p>
             </div>
             <div>
-              <p className="text-gray-500">
+              <p>
                 Reponsibility:{" "}
                 {task?.responsibility ? task?.responsibility : "Null"}
               </p>
-              <p className="text-gray-500">
-                Task id: {task?.id ? task?.id : "Null"}
-              </p>
-              <div className="flex gap-2">
+              <p>Task id: {task?.id ? task?.id : "Null"}</p>
+              <div className="flex gap-1">
                 <button
                   className="rounded-sm bg-sky-500 px-2 py-1 text-white transition-colors hover:bg-sky-600"
                   onClick={edit.toggle}
@@ -134,11 +130,9 @@ export default function DetailTask() {
             </div>
           </div>
         </div>
-        <div className="mt-4 flex flex-col rounded-md bg-white p-4">
+        <div className="dark:bg-dark_secondary mt-4 flex flex-col rounded-md bg-white p-4 dark:text-white">
           <h1 className="text-2xl font-bold">Description</h1>
-          <p className="text-gray-500">
-            {task?.description ? task?.description : "Null"}
-          </p>
+          <p>{task?.description ? task?.description : "Null"}</p>
         </div>
       </Transition>
       <Modal isOpen={edit.isOpen} onClose={edit.toggle}>

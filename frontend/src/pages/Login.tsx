@@ -35,7 +35,7 @@ const Login = () => {
 
   return (
     <Transition>
-      <div className="mx-5 flex h-screen flex-col items-center justify-center space-y-10 md:mx-0 md:my-0 md:flex-row md:space-x-16 md:space-y-0">
+      <div className="dark:bg-dark_primaty mx-5 flex h-screen flex-col items-center justify-center space-y-10 md:mx-0 md:my-0 md:flex-row md:space-x-16 md:space-y-0 dark:text-white">
         <div className="max-w-sm md:w-1/3">
           <img
             src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
@@ -48,7 +48,7 @@ const Login = () => {
           </h2>
 
           <input
-            className="dark:bg-dark w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_primaty w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -56,7 +56,7 @@ const Login = () => {
             required
           />
           <input
-            className="dark:bg-dark mt-4 w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="dark:bg-dark_primaty mt-4 w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

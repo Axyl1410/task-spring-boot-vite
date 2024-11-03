@@ -3,6 +3,9 @@ package com.backend.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.backend.Model.Task;
@@ -42,5 +45,11 @@ public class TaskService {
 
   public List<Task> getTasksByResponsibility(String responsibility) {
     return taskRepository.findByresponsibility(responsibility);
+  }
+
+  public List<Task> getTasksByPage() {
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Task> page = taskRepository.findAllByOrderByIdDesc(pageable);
+    return page.getContent();
   }
 }

@@ -8,7 +8,7 @@ export default function NoPermisson() {
     <Transition>
       <section className="flex h-screen w-full items-center justify-center">
         <div
-          className="bg-secondary text-primary flex h-full w-full items-center justify-center rounded px-8 py-4 transition-colors duration-300 md:px-12 md:py-8"
+          className="dark:bg-dark_primaty flex h-full w-full items-center justify-center rounded px-8 py-4 transition-colors duration-300 md:px-12 md:py-8 dark:text-white"
           id="error-page"
         >
           <div
