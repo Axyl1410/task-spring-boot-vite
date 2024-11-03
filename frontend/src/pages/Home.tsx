@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import { cn } from "../lib/utils";
@@ -24,11 +25,17 @@ export default function Home() {
   const username = localStorage.getItem("username");
   const role = localStorage.getItem("role");
 
-  const checkToken = CheckToken();
-  if (!checkToken) {
-    localStorage.clear();
-    window.location.href = "/login";
-  }
+  useEffect(() => {
+    const checkToken = async () => {
+      const check = await CheckToken();
+      if (check === null) return;
+      if (!check) {
+        localStorage.clear();
+        window.location.href = "/login";
+      }
+    };
+    checkToken();
+  }, []);
 
   const sections = [
     {

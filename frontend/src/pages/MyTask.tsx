@@ -13,16 +13,19 @@ export default function MyTask() {
   const [taskResponsibility, setTaskResponsibility] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task>();
 
-  const checkToken = CheckToken();
-  if (!checkToken) {
-    localStorage.clear();
-    window.location.href = "/login";
-  }
-
   const create = useToggle();
   const edit = useToggle();
   const del = useToggle();
   const { addToast } = useToast();
+
+  const check = CheckToken();
+  useEffect(() => {
+    if (check === null) return;
+    else if (!check) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
+  }, [check]);
 
   const fetchTasks = async (
     endpoint: string,

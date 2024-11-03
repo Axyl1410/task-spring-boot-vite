@@ -12,21 +12,25 @@ export default function User() {
   const [user, setUser] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>();
 
-  const checkToken = CheckToken();
-  if (!checkToken) {
-    localStorage.clear();
-    window.location.href = "/login";
-  }
-
   const create = useToggle();
   const edit = useToggle();
   const del = useToggle();
   const { addToast } = useToast();
 
-  const admin = "admin" === localStorage.getItem("role");
-  if (!admin) {
-    window.location.href = "/no-permission";
-  }
+  useEffect(() => {
+    const checkToken = async () => {
+      const check = await CheckToken();
+      if (check === null) return;
+      if (!check) {
+        localStorage.clear();
+        window.location.href = "/login";
+      } else {
+        const admin = "admin" === localStorage.getItem("role");
+        if (!admin) window.location.href = "/no-permission";
+      }
+    };
+    checkToken();
+  }, []);
 
   const fetchUser = async () => {
     try {

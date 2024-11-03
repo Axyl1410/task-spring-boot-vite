@@ -14,15 +14,21 @@ export default function DetailTask() {
   const [task, setTask] = useState<Task>();
   const [selectedTask, setSelectedTask] = useState<Task>();
 
-  const checkToken = CheckToken();
-  if (!checkToken) {
-    localStorage.clear();
-    window.location.href = "/login";
-  }
-
   const edit = useToggle();
   const del = useToggle();
   const { addToast } = useToast();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const check = await CheckToken();
+      if (check === null) return;
+      if (!check) {
+        localStorage.clear();
+        window.location.href = "/login";
+      }
+    };
+    checkToken();
+  }, []);
 
   const updateTask = async () => {
     try {
