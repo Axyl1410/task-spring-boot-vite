@@ -43,15 +43,22 @@ public class TaskController {
 
     String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
     String loggedInUsername = JWTUtility.extractUsername(token);
+    String role = JWTUtility.extractRole(token);
 
     Task task = taskService.getTaskById(id);
     if (task == null) {
       response.put("error", "Task not found.");
-    } else if (!(task.getUsercreate().equalsIgnoreCase(loggedInUsername)
-        || task.getResponsibility().equalsIgnoreCase(loggedInUsername))) {
-      response.put("error", "You are not authorized to view this task.");
-    } else {
+    }
+    if (role.equalsIgnoreCase("admin")) {
       response.put("task", task);
+    } else {
+      assert task != null;
+      if (!(task.getUsercreate().equalsIgnoreCase(loggedInUsername)
+          || task.getResponsibility().equalsIgnoreCase(loggedInUsername))) {
+        response.put("error", "You are not authorized to view this task.");
+      } else {
+        response.put("task", task);
+      }
     }
     return response;
   }
