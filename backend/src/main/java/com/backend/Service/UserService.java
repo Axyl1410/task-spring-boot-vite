@@ -22,15 +22,6 @@ public class UserService {
     return userRepository.findById(id);
   }
 
-  public User deleteUserById(int id) {
-    Optional<User> user = userRepository.findById(id);
-    if (user.isPresent()) {
-      userRepository.delete(user.get());
-      return user.get();
-    }
-    return null;
-  }
-
   public User createUser(User user) {
     return userRepository.save(user);
   }

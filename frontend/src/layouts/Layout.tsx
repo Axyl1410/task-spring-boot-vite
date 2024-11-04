@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import BackToTop from "../components/ui/BackTotop";
 import Sidebar from "./Sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -8,9 +7,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       layout
       className="flex min-h-screen bg-slate-100 transition dark:bg-dark_primaty"
     >
-      <BackToTop />
       <Sidebar />
-      <div className="container py-4">{children}</div>
+      <div className="no-scrollbar container h-screen overflow-scroll py-4">
+        {children}
+      </div>
     </motion.div>
   );
 }

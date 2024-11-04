@@ -22,7 +22,7 @@ const CombinedCircularProgress: React.FC<CombinedCircularProgressProps> = ({
   const inProgressRatio = (inProgressPercentage / totalPercentage) * 100;
   const completedRatio = (completedPercentage / totalPercentage) * 100;
   return (
-    <div style={{ width: 200, height: 200, margin: "10px" }}>
+    <div className="m-2.5 h-52 w-52">
       <CircularProgressbarWithChildren
         value={completedRatio}
         styles={buildStyles({

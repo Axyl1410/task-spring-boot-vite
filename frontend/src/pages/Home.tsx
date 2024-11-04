@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { IoMdMenu } from "react-icons/io";
 import api from "../api/axiosConfig";
 import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
 import CombinedCircularProgress from "../components/ui/CircularProgress";
 import { Task } from "../constants/Task";
+import useToggle from "../hooks/useToggle";
+import Sidebar from "../layouts/SmallSidebar";
 import { cn } from "../lib/utils";
 
 interface TaskSectionProps {
@@ -31,6 +34,8 @@ export default function Home() {
   const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
   const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
+
+  const sidebar = useToggle();
 
   useEffect(() => {
     const checkToken = async () => {
@@ -74,45 +79,61 @@ export default function Home() {
   ];
 
   return (
-    <Transition>
-      <div className="flex w-full flex-col gap-4">
-        <div className="rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
-          <h1 className="text-lg font-bold">Hello {username}!</h1>
-          <p>Your role is {role}</p>
-        </div>
-        <div className="flex gap-4">
-          <div className="w-2/5 rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <CombinedCircularProgress
-                pendingPercentage={pendingTasks.length}
-                inProgressPercentage={inProgressTasks.length}
-                completedPercentage={completedTasks.length}
-              />
-            </div>
-          </div>
-          <div className="flex h-[252px] w-3/5 flex-col items-center justify-center rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
-            <h1 className="text-xl font-bold">How to use?</h1>
+    <>
+      <Transition>
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex items-center justify-between rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
             <div>
-              <p>- Task: you can create a new task, edit or delete it.</p>
-              <p>+ Pending: task is waiting for someone to start.</p>
-              <p>+ In Progress: task is being done by someone.</p>
-              <p>+ Completed: task is done.</p>
-              <p>- ps: User Create and Reponsibility can be null temporery.</p>
+              <h1 className="text-lg font-bold">Hello {username}!</h1>
+              <p>Your role is {role}</p>
+            </div>
+            <div className="flex lg:hidden">
+              <button
+                onClick={sidebar.toggle}
+                className="flex items-center gap-2 rounded-md text-sm transition-colors sm:bg-indigo-500 sm:px-4 sm:py-2 sm:text-white sm:hover:bg-indigo-600"
+              >
+                <IoMdMenu className="h-6 w-6 sm:h-4 sm:w-4" />
+                <span className="hidden sm:block">Menu</span>
+              </button>
             </div>
           </div>
+          <div className="flex flex-col-reverse gap-4 sm:flex-row">
+            <div className="rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white sm:w-2/5">
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <CombinedCircularProgress
+                  pendingPercentage={pendingTasks.length}
+                  inProgressPercentage={inProgressTasks.length}
+                  completedPercentage={completedTasks.length}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col items-center justify-center rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white sm:w-3/5">
+              <h1 className="text-xl font-bold">How to use?</h1>
+              <div>
+                <p>- Task: you can create a new task, edit or delete it.</p>
+                <p>+ Pending: task is waiting for someone to start.</p>
+                <p>+ In Progress: task is being done by someone.</p>
+                <p>+ Completed: task is done.</p>
+                <p>
+                  - ps: User Create and Reponsibility can be null temporery.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            {sections.map((section, index) => (
+              <TaskSection key={index} {...section} />
+            ))}
+          </div>
         </div>
-        <div className="flex gap-4">
-          {sections.map((section, index) => (
-            <TaskSection key={index} {...section} />
-          ))}
-        </div>
-      </div>
-    </Transition>
+      </Transition>
+      <Sidebar isOpen={sidebar.isOpen} onClose={sidebar.toggle} />
+    </>
   );
 }
 
 const TaskSection = ({ title, tasks, gradient }: TaskSectionProps) => (
-  <div className="relative w-1/4 rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
+  <div className="relative rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white sm:w-1/4">
     <h2 className="text-lg font-bold">{title}</h2>
     {tasks.map((task, index) => (
       <p key={index}>- {task}</p>

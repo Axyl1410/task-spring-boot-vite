@@ -18,7 +18,7 @@ export default function Sidebar() {
   return (
     <>
       <motion.div
-        className="flex min-h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white"
+        className="hidden h-screen flex-col items-center justify-between border-r border-gray-500 bg-white px-2 py-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white lg:flex"
         layout
         animate={{ width: sidebar.isOpen ? "240px" : "60px" }}
         transition={{

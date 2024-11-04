@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { IoMdMenu } from "react-icons/io";
 import api from "../api/axiosConfig";
 import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
@@ -7,6 +8,7 @@ import { useToast } from "../components/toast/ToastContext";
 import Modal from "../components/ui/Modal";
 import type { User } from "../constants/User";
 import useToggle from "../hooks/useToggle";
+import Sidebar from "../layouts/SmallSidebar";
 
 export default function User() {
   const [user, setUser] = useState<User[]>([]);
@@ -15,6 +17,7 @@ export default function User() {
   const create = useToggle();
   const edit = useToggle();
   const del = useToggle();
+  const sidebar = useToggle();
   const { addToast } = useToast();
 
   useEffect(() => {
@@ -110,8 +113,19 @@ export default function User() {
   return (
     <>
       <Transition>
-        <div className="dark:bg-dark_secondary flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md transition-colors dark:text-white">
-          <h1 className="text-2xl font-bold">User Manager</h1>
+        <div className="flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">User Manager</h1>
+            <div className="flex lg:hidden">
+              <button
+                onClick={sidebar.toggle}
+                className="gap-2d flex items-center transition-colors"
+              >
+                <IoMdMenu className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+
           <div className="flex items-center justify-center gap-2">
             <button
               className="h-fit w-fit text-nowrap rounded bg-indigo-500 p-1.5 text-white transition-colors hover:bg-indigo-600"
@@ -120,7 +134,7 @@ export default function User() {
               Create User
             </button>
             <input
-              className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+              className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
               type="text"
               placeholder="Search user"
             />
@@ -187,19 +201,19 @@ export default function User() {
         <div className="flex w-full flex-col gap-4">
           <h1 className="text-2xl font-bold">Create User</h1>
           <input
-            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
             type="text"
             placeholder="Username"
             onChange={(e) => handleUser(e, "username")}
           />
           <input
-            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
             type="password"
             placeholder="Password"
             onChange={(e) => handleUser(e, "password")}
           />
           <select
-            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
             onChange={(e) => handleUser(e, "role")}
           >
             <option value="">Select Role</option>
@@ -226,21 +240,21 @@ export default function User() {
         <div className="flex w-full flex-col gap-4">
           <h1 className="text-2xl font-bold">Edit User</h1>
           <input
-            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
             type="text"
             placeholder="Username"
             value={selectedUser?.username || ""}
             onChange={(e) => handleUser(e, "username")}
           />
           <input
-            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
             type="password"
             placeholder="Password"
             value={selectedUser?.password || ""}
             onChange={(e) => handleUser(e, "password")}
           />
           <select
-            className="dark:bg-dark_secondary w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
             value={selectedUser?.role || ""}
             onChange={(e) => handleUser(e, "role")}
           >
@@ -291,6 +305,7 @@ export default function User() {
           </div>
         </div>
       </Modal>
+      <Sidebar isOpen={sidebar.isOpen} onClose={sidebar.toggle} />
     </>
   );
 }
