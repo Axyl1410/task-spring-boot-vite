@@ -22,7 +22,9 @@ export default function MyTask() {
   useEffect(() => {
     if (check === null) return;
     else if (!check) {
+      const theme = localStorage.getItem("theme");
       localStorage.clear();
+      if (theme) localStorage.setItem("theme", theme);
       window.location.href = "/login";
     }
   }, [check]);

@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       layout
-      className="dark:bg-dark_primaty flex bg-slate-100 transition"
+      className="flex min-h-screen bg-slate-100 transition dark:bg-dark_primaty"
     >
       <BackToTop />
       <Sidebar />

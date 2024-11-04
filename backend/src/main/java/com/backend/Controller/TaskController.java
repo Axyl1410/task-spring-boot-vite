@@ -82,8 +82,13 @@ public class TaskController {
     return taskService.getTasksByResponsibility(responsibility);
   }
 
-  @GetMapping("/ten")
+  @GetMapping("/lastest")
   public List<Task> getTasksByPage() {
     return taskService.getTasksByPage();
+  }
+
+  @GetMapping("/status/{status}")
+  public List<Task> getTasksByStatus(@PathVariable String status) {
+    return taskService.getTasksByStatus(status);
   }
 }

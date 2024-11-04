@@ -2,6 +2,7 @@ package com.backend.Service;
 
 import java.util.List;
 
+import com.backend.Enum.TaskStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,6 +51,12 @@ public class TaskService {
   public List<Task> getTasksByPage() {
     Pageable pageable = PageRequest.of(0, 10);
     Page<Task> page = taskRepository.findAllByOrderByIdDesc(pageable);
+    return page.getContent();
+  }
+
+  public List<Task> getTasksByStatus(String status) {
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<Task> page = taskRepository.findBystatus(TaskStatusEnum.valueOf(status), pageable);
     return page.getContent();
   }
 }

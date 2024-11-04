@@ -2,6 +2,7 @@ package com.backend.Repository;
 
 import java.util.List;
 
+import com.backend.Enum.TaskStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,6 @@ public interface TaskRepository extends JpaRepository<Task, Object> {
   List<Task> findByresponsibility(String responsibility);
 
   Page<Task> findAllByOrderByIdDesc(Pageable pageable);
+
+  Page<Task> findBystatus(TaskStatusEnum status, Pageable pageable);
 }

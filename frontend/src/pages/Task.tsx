@@ -23,7 +23,9 @@ export default function Task() {
       const check = await CheckToken();
       if (check === null) return;
       if (!check) {
+        const theme = localStorage.getItem("theme");
         localStorage.clear();
+        if (theme) localStorage.setItem("theme", theme);
         window.location.href = "/login";
       } else {
         const admin = "admin" === localStorage.getItem("role");
