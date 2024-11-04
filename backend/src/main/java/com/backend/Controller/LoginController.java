@@ -3,12 +3,19 @@ package com.backend.Controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.backend.Auth.JWTUtility;
 import com.backend.Model.LoginRequest;
 import com.backend.Service.LoginService;
+
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -39,7 +46,7 @@ public class LoginController {
       return response;
     }
     String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
-    if(JWTUtility.validateToken(token, JWTUtility.extractUsername(token))) {
+    if (JWTUtility.validateToken(token, JWTUtility.extractUsername(token))) {
       response.put("message", "Token is valid.");
     } else {
       response.put("error", "Token is invalid.");

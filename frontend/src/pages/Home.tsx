@@ -84,13 +84,21 @@ export default function Home() {
           <div className="w-2/5 rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <CombinedCircularProgress
+                pendingPercentage={pendingTasks.length}
                 inProgressPercentage={inProgressTasks.length}
                 completedPercentage={completedTasks.length}
               />
             </div>
           </div>
-          <div className="flex h-[252px] w-3/5 items-center justify-center rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
-            <h1>Coming Soon</h1>
+          <div className="flex h-[252px] w-3/5 flex-col items-center justify-center rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
+            <h1 className="text-xl font-bold">How to use?</h1>
+            <div>
+              <p>- Task: you can create a new task, edit or delete it.</p>
+              <p>+ Pending: task is waiting for someone to start.</p>
+              <p>+ In Progress: task is being done by someone.</p>
+              <p>+ Completed: task is done.</p>
+              <p>- ps: User Create and Reponsibility can be null temporery.</p>
+            </div>
           </div>
         </div>
         <div className="flex gap-4">

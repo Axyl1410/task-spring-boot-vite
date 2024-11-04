@@ -7,28 +7,34 @@ import {
 import "react-circular-progressbar/dist/styles.css";
 
 interface CombinedCircularProgressProps {
+  pendingPercentage: number;
   inProgressPercentage: number;
   completedPercentage: number;
 }
 
 const CombinedCircularProgress: React.FC<CombinedCircularProgressProps> = ({
+  pendingPercentage,
   inProgressPercentage,
   completedPercentage,
 }) => {
+  const totalPercentage =
+    inProgressPercentage + completedPercentage + pendingPercentage;
+  const inProgressRatio = (inProgressPercentage / totalPercentage) * 100;
+  const completedRatio = (completedPercentage / totalPercentage) * 100;
   return (
     <div style={{ width: 200, height: 200, margin: "10px" }}>
       <CircularProgressbarWithChildren
-        value={completedPercentage < 10 ? completedPercentage * 10 : 100}
+        value={completedRatio}
         styles={buildStyles({
           pathColor: "#10b981",
           trailColor: "#eee",
           strokeLinecap: "butt",
           textSize: "10px",
         })}
-        text={`${completedPercentage < 10 ? completedPercentage * 10 : 100}% compeleted`}
+        text={`${completedRatio.toFixed(0)}% compeleted`}
       >
         <CircularProgressbar
-          value={inProgressPercentage < 10 ? inProgressPercentage * 10 : 100}
+          value={inProgressRatio}
           styles={buildStyles({
             trailColor: "transparent",
             strokeLinecap: "butt",
