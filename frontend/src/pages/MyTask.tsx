@@ -151,6 +151,28 @@ export default function MyTask() {
               className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
               type="text"
               placeholder="Search task"
+              onChange={(e) => {
+                const search = e.target.value;
+                if (!search) {
+                  const username = localStorage.getItem("username");
+                  fetchTasks(`api/v1/task/usercreate/${username}`, setTask);
+                  fetchTasks(
+                    `api/v1/task/responsibility/${username}`,
+                    setTaskResponsibility,
+                  );
+                } else {
+                  setTask(
+                    task.filter((t) =>
+                      t.title.toLowerCase().includes(search.toLowerCase()),
+                    ),
+                  );
+                  setTaskResponsibility(
+                    taskResponsibility.filter((t) =>
+                      t.title.toLowerCase().includes(search.toLowerCase()),
+                    ),
+                  );
+                }
+              }}
             />
           </div>
           {task.length === 0 ? (
@@ -162,65 +184,69 @@ export default function MyTask() {
               No task found
             </motion.p>
           ) : (
-            <motion.table
-              className="w-full"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-            >
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 py-1">ID</th>
-                  <th className="border border-gray-300 py-1">title</th>
-                  <th className="border border-gray-300 py-1">User Create</th>
-                  <th className="border border-gray-300 py-1">
-                    Responsibility
-                  </th>
-                  <th className="border border-gray-300 py-1">Status</th>
-                  <th className="w-52 border border-gray-300 py-1">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {task.map((t) => (
-                  <tr
-                    key={t.id}
-                    className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <td className="border border-gray-300">{t.id}</td>
-                    <td className="border border-gray-300">{t.title}</td>
-                    <td className="border border-gray-300">{t.usercreate}</td>
-                    <td className="border border-gray-300">
-                      {t.responsibility}
-                    </td>
-                    <td className="border border-gray-300">{t.status}</td>
-                    <td className="space-x-1 border border-gray-300 py-1">
-                      <button
-                        className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
-                        onClick={() => {
-                          edit.toggle();
-                          setSelectedTask(t);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <Link to={`/task/${t.id}`}>
-                        <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
-                          Detail
-                        </button>
-                      </Link>
-                      <button
-                        className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
-                        onClick={() => {
-                          del.toggle();
-                          setSelectedTask(t);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
+            <div className="overflow-x-auto lg:overflow-auto">
+              <motion.table
+                className="min-w-full"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+              >
+                <thead>
+                  <tr>
+                    <th className="border border-gray-300 py-1">ID</th>
+                    <th className="border border-gray-300 py-1">title</th>
+                    <th className="border border-gray-300 py-1">User Create</th>
+                    <th className="border border-gray-300 py-1">
+                      Responsibility
+                    </th>
+                    <th className="border border-gray-300 py-1">Status</th>
+                    <th className="w-52 border border-gray-300 py-1">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </motion.table>
+                </thead>
+                <tbody>
+                  {task.map((t) => (
+                    <tr
+                      key={t.id}
+                      className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <td className="border border-gray-300">{t.id}</td>
+                      <td className="border border-gray-300">{t.title}</td>
+                      <td className="border border-gray-300">{t.usercreate}</td>
+                      <td className="border border-gray-300">
+                        {t.responsibility}
+                      </td>
+                      <td className="border border-gray-300">{t.status}</td>
+                      <td className="space-x-1 border border-gray-300 py-1">
+                        <div className="flex w-full justify-center gap-2 px-2">
+                          <button
+                            className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
+                            onClick={() => {
+                              edit.toggle();
+                              setSelectedTask(t);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <Link to={`/task/${t.id}`}>
+                            <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
+                              Detail
+                            </button>
+                          </Link>
+                          <button
+                            className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+                            onClick={() => {
+                              del.toggle();
+                              setSelectedTask(t);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </motion.table>
+            </div>
           )}
           <h1 className="text-2xl font-bold">My Responsibility</h1>
           {taskResponsibility.length === 0 ? (
@@ -232,65 +258,69 @@ export default function MyTask() {
               No task found
             </motion.p>
           ) : (
-            <motion.table
-              className="w-full"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-            >
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 py-1">ID</th>
-                  <th className="border border-gray-300 py-1">title</th>
-                  <th className="border border-gray-300 py-1">User Create</th>
-                  <th className="border border-gray-300 py-1">
-                    Responsibility
-                  </th>
-                  <th className="border border-gray-300 py-1">Status</th>
-                  <th className="w-52 border border-gray-300 py-1">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {taskResponsibility.map((t) => (
-                  <tr
-                    key={t.id}
-                    className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <td className="border border-gray-300">{t.id}</td>
-                    <td className="border border-gray-300">{t.title}</td>
-                    <td className="border border-gray-300">{t.usercreate}</td>
-                    <td className="border border-gray-300">
-                      {t.responsibility}
-                    </td>
-                    <td className="border border-gray-300">{t.status}</td>
-                    <td className="space-x-1 border border-gray-300 py-1">
-                      <button
-                        className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
-                        onClick={() => {
-                          edit.toggle();
-                          setSelectedTask(t);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <Link to={`/task/${t.id}`}>
-                        <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
-                          Detail
-                        </button>
-                      </Link>
-                      <button
-                        className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
-                        onClick={() => {
-                          del.toggle();
-                          setSelectedTask(t);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
+            <div className="overflow-x-scroll lg:overflow-auto">
+              <motion.table
+                className="min-w-full"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+              >
+                <thead>
+                  <tr>
+                    <th className="border border-gray-300 py-1">ID</th>
+                    <th className="border border-gray-300 py-1">title</th>
+                    <th className="border border-gray-300 py-1">User Create</th>
+                    <th className="border border-gray-300 py-1">
+                      Responsibility
+                    </th>
+                    <th className="border border-gray-300 py-1">Status</th>
+                    <th className="w-52 border border-gray-300 py-1">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </motion.table>
+                </thead>
+                <tbody>
+                  {taskResponsibility.map((t) => (
+                    <tr
+                      key={t.id}
+                      className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <td className="border border-gray-300">{t.id}</td>
+                      <td className="border border-gray-300">{t.title}</td>
+                      <td className="border border-gray-300">{t.usercreate}</td>
+                      <td className="border border-gray-300">
+                        {t.responsibility}
+                      </td>
+                      <td className="border border-gray-300">{t.status}</td>
+                      <td className="border border-gray-300 py-1">
+                        <div className="flex w-full justify-center gap-2 px-2">
+                          <button
+                            className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
+                            onClick={() => {
+                              edit.toggle();
+                              setSelectedTask(t);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <Link to={`/task/${t.id}`}>
+                            <button className="rounded bg-indigo-500 px-2 py-1 text-white transition-colors hover:bg-indigo-600">
+                              Detail
+                            </button>
+                          </Link>
+                          <button
+                            className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+                            onClick={() => {
+                              del.toggle();
+                              setSelectedTask(t);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </motion.table>
+            </div>
           )}
         </div>
       </Transition>

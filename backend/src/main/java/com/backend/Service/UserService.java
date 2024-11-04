@@ -30,10 +30,6 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public User findByUsername(String username) {
-    return userRepository.findByusername(username);
-  }
-
   public User deleteUserByUsername(String username) {
     User user = userRepository.findByusername(username);
     if (user != null) {

@@ -113,7 +113,7 @@ export default function User() {
   return (
     <>
       <Transition>
-        <div className="flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-md transition-colors dark:bg-dark_secondary dark:text-white">
+        <div className="flex h-full w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm transition-colors dark:bg-dark_secondary dark:text-white dark:shadow-white">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">User Manager</h1>
             <div className="flex lg:hidden">
@@ -137,6 +137,18 @@ export default function User() {
               className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_secondary"
               type="text"
               placeholder="Search user"
+              onChange={(e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (!searchTerm) {
+                  fetchUser();
+                } else {
+                  setUser((prevUsers) =>
+                    prevUsers.filter((user) =>
+                      user.username.toLowerCase().includes(searchTerm),
+                    ),
+                  );
+                }
+              }}
             />
           </div>
           {user.length === 0 ? (
@@ -148,52 +160,56 @@ export default function User() {
               No user found
             </motion.p>
           ) : (
-            <motion.table
-              className="w-full"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-            >
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 py-1">ID</th>
-                  <th className="border border-gray-300 py-1">Username</th>
-                  <th className="border border-gray-300 py-1">Role</th>
-                  <th className="w-52 border border-gray-300 py-1">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {user.map((u) => (
-                  <tr
-                    key={u.id}
-                    className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <td className="border border-gray-300">{u.id}</td>
-                    <td className="border border-gray-300">{u.username}</td>
-                    <td className="border border-gray-300">{u.role}</td>
-                    <td className="space-x-1 border border-gray-300 py-1">
-                      <button
-                        className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
-                        onClick={() => {
-                          edit.toggle();
-                          setSelectedUser(u);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
-                        onClick={() => {
-                          del.toggle();
-                          setSelectedUser(u);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
+            <div className="overflow-x-scroll lg:overflow-auto">
+              <motion.table
+                className="min-w-full"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+              >
+                <thead>
+                  <tr>
+                    <th className="border border-gray-300 py-1">ID</th>
+                    <th className="border border-gray-300 py-1">Username</th>
+                    <th className="border border-gray-300 py-1">Role</th>
+                    <th className="w-52 border border-gray-300 py-1">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </motion.table>
+                </thead>
+                <tbody>
+                  {user.map((u) => (
+                    <tr
+                      key={u.id}
+                      className="p-2 text-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <td className="border border-gray-300">{u.id}</td>
+                      <td className="border border-gray-300">{u.username}</td>
+                      <td className="border border-gray-300">{u.role}</td>
+                      <td className="border border-gray-300 py-1">
+                        <div className="flex w-full justify-center gap-2 px-2">
+                          <button
+                            className="rounded bg-blue-500 px-2 py-1 text-white transition-colors hover:bg-blue-600"
+                            onClick={() => {
+                              edit.toggle();
+                              setSelectedUser(u);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="rounded bg-red-500 px-2 py-1 text-white transition-colors hover:bg-red-600"
+                            onClick={() => {
+                              del.toggle();
+                              setSelectedUser(u);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </motion.table>
+            </div>
           )}
         </div>
       </Transition>
