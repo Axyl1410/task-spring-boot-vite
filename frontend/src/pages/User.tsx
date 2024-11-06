@@ -31,7 +31,7 @@ export default function User() {
         window.location.href = "/login";
       } else {
         const admin = "admin" === localStorage.getItem("role");
-        !admin ? (window.location.href = "/no-permission") : fetchUser();
+        !admin ? (window.location.href = "/nopermission") : fetchUser();
       }
     };
     checkToken();

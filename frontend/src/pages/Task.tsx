@@ -32,7 +32,7 @@ export default function Task() {
         window.location.href = "/login";
       } else {
         const admin = "admin" === localStorage.getItem("role");
-        !admin ? (window.location.href = "/no-permission") : fetchTask();
+        !admin ? (window.location.href = "/nopermission") : fetchTask();
       }
     };
     checkToken();

@@ -54,7 +54,7 @@ export default function Sidebar() {
               isOpen={sidebar.isOpen}
             />
           </Link>
-          <Link to={"/my-task"}>
+          <Link to={"/mytask"}>
             <SidebarItem
               icon={<MdTask className="h-6 w-6" />}
               label="My task"

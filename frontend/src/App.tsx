@@ -1,85 +1,74 @@
 import { lazy, Suspense, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Loading from "./components/common/loading/Loading";
+import ScrollToTop from "./components/common/ScrollToTop";
 import { ToastProvider } from "./components/toast/ToastContext";
-import DetailTask from "./pages/DetailTask";
-import MyTask from "./pages/MyTask";
-import Task from "./pages/Task";
-import User from "./pages/User";
+import Layout from "./layouts/Layout";
 
-const Layout = lazy(() => import("./layouts/Layout"));
+const DetailTask = lazy(() => import("./pages/DetailTask"));
+const MyTask = lazy(() => import("./pages/MyTask"));
+const Task = lazy(() => import("./pages/Task"));
+const User = lazy(() => import("./pages/User"));
 const Login = lazy(() => import("./pages/Login"));
 const NoPermisson = lazy(() => import("./pages/nopermisson/NoPermisson"));
 const NotFound = lazy(() => import("./pages/notfound/NotFound"));
 const Home = lazy(() => import("./pages/Home"));
 
 export default function App() {
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     document.documentElement.classList.add(savedTheme);
   }, []);
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        <Layout>
-          <Home />
-        </Layout>
-      ),
-    },
-    {
-      path: "/task",
-      element: (
-        <Layout>
-          <Task />
-        </Layout>
-      ),
-    },
-    {
-      path: "/task/:id",
-      element: (
-        <Layout>
-          <DetailTask />
-        </Layout>
-      ),
-    },
-    {
-      path: "/user",
-      element: (
-        <Layout>
-          <User />
-        </Layout>
-      ),
-    },
-    {
-      path: "/my-task",
-      element: (
-        <Layout>
-          <MyTask />
-        </Layout>
-      ),
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "*",
-      element: <NotFound />,
-    },
-    {
-      path: "/no-permission",
-      element: <NoPermisson />,
-    },
-  ]);
-
   return (
     <ToastProvider>
       <Suspense fallback={<Loading />}>
-        {token ? <RouterProvider router={router}></RouterProvider> : <Login />}
+        <ScrollToTop />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Home />
+              </Layout>
+            }
+          />
+          <Route
+            path="/task"
+            element={
+              <Layout>
+                <Task />
+              </Layout>
+            }
+          />
+          <Route
+            path="/task/:id"
+            element={
+              <Layout>
+                <DetailTask />
+              </Layout>
+            }
+          />
+          <Route
+            path="/mytask"
+            element={
+              <Layout>
+                <MyTask />
+              </Layout>
+            }
+          />
+          <Route
+            path="/user"
+            element={
+              <Layout>
+                <User />
+              </Layout>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/nopermisson" element={<NoPermisson />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Suspense>
     </ToastProvider>
   );

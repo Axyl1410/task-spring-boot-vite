@@ -19,7 +19,7 @@ interface SideBarItem {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const SideBarItems: SideBarItem[] = [
     { to: "/", children: "Home" },
-    { to: "/my-task", children: "My Task" },
+    { to: "/mytask", children: "My Task" },
     { to: "/task", children: "Task" },
     { to: "/user", children: "User" },
   ];
