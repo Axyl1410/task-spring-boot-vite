@@ -1,12 +1,12 @@
 import React from "react";
-import Transition from "../Transition";
-import { cn } from "./../../../lib/utils";
+import { cn } from "../../lib/utils";
 import styles from "./Loading.module.css";
+import Transition from "./Transition";
 
 const Loading: React.FC = () => {
   return (
     <Transition>
-      <div className="dark:bg-dark_primaty fixed top-0 z-50 h-full w-full bg-white transition-colors">
+      <div className="fixed top-0 z-50 h-full w-full bg-white transition-colors dark:bg-dark_primaty">
         <svg
           className={cn(styles["lds-ripple"], styles.tea)}
           width="37"

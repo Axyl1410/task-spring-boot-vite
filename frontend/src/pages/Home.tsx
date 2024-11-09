@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import { IoMdMenu } from "react-icons/io";
 import api from "../api/axiosConfig";
 import CheckToken from "../api/CheckToken";
 import Transition from "../components/common/Transition";
-import CombinedCircularProgress from "../components/ui/CircularProgress";
 import { Task } from "../constants/Task";
 import useToggle from "../hooks/useToggle";
 import Sidebar from "../layouts/SmallSidebar";
@@ -13,6 +18,12 @@ interface TaskSectionProps {
   title: string;
   tasks: string[];
   gradient: string;
+}
+
+interface CombinedCircularProgressProps {
+  pendingPercentage: number;
+  inProgressPercentage: number;
+  completedPercentage: number;
 }
 
 const fetchTasks = async (
@@ -143,3 +154,37 @@ const TaskSection = ({ title, tasks, gradient }: TaskSectionProps) => (
     ></div>
   </div>
 );
+
+const CombinedCircularProgress: React.FC<CombinedCircularProgressProps> = ({
+  pendingPercentage,
+  inProgressPercentage,
+  completedPercentage,
+}) => {
+  const totalPercentage =
+    inProgressPercentage + completedPercentage + pendingPercentage;
+  const inProgressRatio = (inProgressPercentage / totalPercentage) * 100;
+  const completedRatio = (completedPercentage / totalPercentage) * 100;
+  return (
+    <div className="m-2.5 h-52 w-52">
+      <CircularProgressbarWithChildren
+        value={completedRatio}
+        styles={buildStyles({
+          pathColor: "#10b981",
+          trailColor: "#eee",
+          strokeLinecap: "butt",
+          textSize: "10px",
+        })}
+        text={`${completedRatio.toFixed(0)}% compeleted`}
+      >
+        <CircularProgressbar
+          value={inProgressRatio}
+          styles={buildStyles({
+            trailColor: "transparent",
+            strokeLinecap: "butt",
+            pathColor: "#0ea5e9",
+          })}
+        />
+      </CircularProgressbarWithChildren>
+    </div>
+  );
+};

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axiosConfig";
 import Transition from "../components/common/Transition";
-import { useToast } from "../components/toast/ToastContext";
+import { useToast } from "../components/ui/ToastContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -35,7 +35,7 @@ const Login = () => {
 
   return (
     <Transition>
-      <div className="dark:bg-dark_primaty mx-5 flex h-screen flex-col items-center justify-center space-y-10 md:mx-0 md:my-0 md:flex-row md:space-x-16 md:space-y-0 dark:text-white">
+      <div className="mx-5 flex h-screen flex-col items-center justify-center space-y-10 dark:bg-dark_primaty dark:text-white md:mx-0 md:my-0 md:flex-row md:space-x-16 md:space-y-0">
         <div className="max-w-sm md:w-1/3">
           <img
             src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
@@ -43,12 +43,12 @@ const Login = () => {
           />
         </div>
         <div className="max-w-sm md:w-1/3">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900 md:text-3xl dark:text-blue-600">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-blue-600 md:text-3xl">
             Login
           </h2>
 
           <input
-            className="dark:bg-dark_primaty w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_primaty"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -56,7 +56,7 @@ const Login = () => {
             required
           />
           <input
-            className="dark:bg-dark_primaty mt-4 w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm"
+            className="mt-4 w-full rounded border border-solid border-gray-300 px-4 py-2 text-sm dark:bg-dark_primaty"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

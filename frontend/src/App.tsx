@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import Loading from "./components/common/loading/Loading";
+import Loading from "./components/common/Loading";
 import ScrollToTop from "./components/common/ScrollToTop";
-import { ToastProvider } from "./components/toast/ToastContext";
+import { ToastProvider } from "./components/ui/ToastContext";
 import Layout from "./layouts/Layout";
 
 const DetailTask = lazy(() => import("./pages/DetailTask"));
@@ -10,8 +10,8 @@ const MyTask = lazy(() => import("./pages/MyTask"));
 const Task = lazy(() => import("./pages/Task"));
 const User = lazy(() => import("./pages/User"));
 const Login = lazy(() => import("./pages/Login"));
-const NoPermisson = lazy(() => import("./pages/nopermisson/NoPermisson"));
-const NotFound = lazy(() => import("./pages/notfound/NotFound"));
+const NoPermisson = lazy(() => import("./pages/NoPermisson"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 const Home = lazy(() => import("./pages/Home"));
 
 export default function App() {
